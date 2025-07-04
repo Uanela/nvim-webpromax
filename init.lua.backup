@@ -1,0 +1,482 @@
+-- init.lua - Complete Neovim configuration in Lua
+
+-- ========== Basic Settings ==========
+vim.opt.compatible = false
+vim.opt.number = true
+vim.opt.foldmethod = "manual"
+vim.opt.signcolumn = "yes"
+vim.opt.mouse = "a"
+vim.opt.clipboard = "unnamed"
+vim.opt.tabstop = 2
+vim.opt.shiftwidth = 2
+vim.opt.expandtab = true
+vim.opt.autoindent = true
+vim.opt.smartindent = true
+vim.opt.wrap = true
+vim.opt.encoding = "utf-8"
+vim.opt.scrolloff = 5
+vim.opt.hidden = true
+vim.opt.splitbelow = true
+vim.opt.splitright = true
+vim.opt.lazyredraw = true
+vim.opt.ttyfast = true
+vim.opt.history = 200
+
+-- Enable syntax and filetype
+vim.cmd("syntax on")
+vim.cmd("filetype plugin indent on")
+
+-- Set leader key
+vim.g.mapleader = " "
+
+-- ========== Search Settings ==========
+vim.opt.incsearch = true
+
+-- ========== Wildmenu ==========
+vim.opt.wildmenu = true
+vim.opt.wildmode = "full"
+
+-- ========== Plugin Manager (Packer) ==========
+-- First, install packer if it's not installed
+local ensure_packer = function()
+  local fn = vim.fn
+  local install_path = fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
+  if fn.empty(fn.glob(install_path)) > 0 then
+    fn.system({'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path})
+    vim.cmd [[packadd packer.nvim]]
+    return true
+  end
+  return false
+end
+
+local packer_bootstrap = ensure_packer()
+
+require('packer').startup(function(use)
+  -- Packer can manage itself
+  use 'wbthomason/packer.nvim'
+
+  -- Appearance
+  use 'itchyny/lightline.vim'
+  
+  -- Icons
+  use 'nvim-tree/nvim-web-devicons'
+  
+  -- File Navigation
+  use {
+    'nvim-tree/nvim-tree.lua',
+    requires = 'nvim-tree/nvim-web-devicons'
+  }
+  use {
+    'romgrk/barbar.nvim',
+    requires = 'nvim-web-devicons'
+  }
+  
+  -- Fuzzy Finder
+  use {
+    'junegunn/fzf',
+    run = function() vim.fn['fzf#install']() end
+  }
+  use 'junegunn/fzf.vim'
+  
+  -- Git
+  use 'tpope/vim-fugitive'
+  use 'airblade/vim-gitgutter'
+  
+  -- LSP & Completion
+  use {'neoclide/coc.nvim', branch = 'release'}
+  
+  -- Commenting
+  use 'tpope/vim-commentary'
+  
+  -- Language Support
+  use 'sheerun/vim-polyglot'
+  use 'leafgarland/typescript-vim'
+  
+  -- Text Objects
+  use 'kana/vim-textobj-user'
+  use 'kana/vim-textobj-function'
+  use 'thinca/vim-textobj-function-javascript'
+  
+  -- Misc
+  use 'editorconfig/editorconfig-vim'
+  use 'jiangmiao/auto-pairs'
+  
+  -- Themes
+  use {'dracula/vim', as = 'dracula'}
+  use 'olimorris/onedarkpro.nvim'
+  
+  -- LSP
+  use 'neovim/nvim-lspconfig'
+  
+  -- Treesitter
+  use {
+    'nvim-treesitter/nvim-treesitter',
+    run = ':TSUpdate'
+  }
+  
+  -- Prettier
+  use {
+    'prettier/vim-prettier',
+    run = 'npm install --frozen-lockfile --production'
+  }
+  
+  -- Snippets (simplified)
+  use 'SirVer/ultisnips'
+  
+  -- TailwindCSS (simplified)
+  use 'hrsh7th/nvim-cmp'
+
+  -- Automatically set up your configuration after cloning packer.nvim
+  if packer_bootstrap then
+    require('packer').sync()
+  end
+end)
+
+-- ========== Theme Configuration ==========
+vim.opt.termguicolors = true
+vim.cmd("colorscheme onedark")
+
+-- Custom VS Code colors function
+local function setup_vscode_colors()
+  local highlights = {
+    -- Background and foreground
+    Normal = { bg = "#080c13", fg = "#d1d1d1" },
+    NormalNC = { bg = "#080c13", fg = "#d1d1d1" },
+    
+    -- Line numbers
+    LineNr = { fg = "#7b8baa", bg = "NONE" },
+    LineNrNC = { fg = "#7b8baa", bg = "NONE" },
+    CursorLineNr = { fg = "#cfcfcf", bg = "NONE" },
+    
+    -- Current line
+    CursorLine = { bg = "#0e0e0e" },
+    
+    -- Comments
+    Comment = { fg = "#5c6370", italic = true },
+    
+    -- Keywords
+    Keyword = { fg = "#c678dd" },
+    Statement = { fg = "#c678dd" },
+    Conditional = { fg = "#c678dd" },
+    Repeat = { fg = "#c678dd" },
+    
+    -- Strings
+    String = { fg = "#98c379" },
+    Character = { fg = "#98c379" },
+    
+    -- Functions
+    Function = { fg = "#61afef" },
+    
+    -- Variables
+    Identifier = { fg = "#e06c75" },
+    
+    -- Constants
+    Constant = { fg = "#d19a66" },
+    Number = { fg = "#d19a66" },
+    Boolean = { fg = "#d19a66" },
+    
+    -- Types
+    Type = { fg = "#e5c07b" },
+    StorageClass = { fg = "#e5c07b" },
+    
+    -- Operators
+    Operator = { fg = "#56b6c2" },
+    
+    -- Preprocessor
+    PreProc = { fg = "#c678dd" },
+    
+    -- Special
+    Special = { fg = "#c678dd" },
+    
+    -- Search
+    Search = { bg = "#e5c07b", fg = "#282c34" },
+    IncSearch = { bg = "#61afef", fg = "#282c34" },
+    
+    -- Visual
+    Visual = { bg = "#3e4451" },
+    
+    -- Status line
+    StatusLine = { bg = "#3e4451", fg = "#abb2bf" },
+    StatusLineNC = { bg = "#2c323c", fg = "#5c6370" },
+    
+    -- Vertical split
+    VertSplit = { fg = "#3e4451", bg = "NONE" },
+    
+    -- Popup menu
+    Pmenu = { bg = "#2c323c", fg = "#abb2bf" },
+    PmenuSel = { bg = "#3e4451", fg = "#abb2bf" },
+    PmenuSbar = { bg = "#3e4451" },
+    PmenuThumb = { bg = "#5c6370" },
+    
+    -- Git gutter
+    GitGutterAdd = { fg = "#98c379" },
+    GitGutterChange = { fg = "#e5c07b" },
+    GitGutterDelete = { fg = "#e06c75" },
+    
+    -- Diagnostics
+    DiagnosticError = { fg = "#e06c75" },
+    DiagnosticWarn = { fg = "#e5c07b" },
+    DiagnosticInfo = { fg = "#61afef" },
+    DiagnosticHint = { fg = "#56b6c2" },
+    
+    -- CoC
+    CocErrorSign = { fg = "#e06c75" },
+    CocWarningSign = { fg = "#e5c07b" },
+    CocInfoSign = { fg = "#61afef" },
+    CocHintSign = { fg = "#56b6c2" },
+    
+    -- Matching parentheses
+    MatchParen = { bg = "#3e4451", fg = "#61afef", bold = true },
+    
+    -- Folded
+    Folded = { bg = "#2c323c", fg = "#5c6370" },
+    
+    -- Tab line
+    TabLine = { bg = "#2c323c", fg = "#5c6370" },
+    TabLineFill = { bg = "#2c323c" },
+    TabLineSel = { bg = "#3e4451", fg = "#abb2bf" },
+    
+    -- End of buffer
+    EndOfBuffer = { fg = "#080c13", bg = "#080c13" },
+    EndOfBufferNC = { fg = "#080c13", bg = "#080c13" },
+  }
+
+  for group, opts in pairs(highlights) do
+    vim.api.nvim_set_hl(0, group, opts)
+  end
+end
+
+-- Apply colors after colorscheme changes
+vim.api.nvim_create_autocmd("ColorScheme", {
+  callback = setup_vscode_colors
+})
+
+-- Apply colors now
+setup_vscode_colors()
+
+-- ========== Lightline Configuration ==========
+vim.g.lightline = {
+  colorscheme = 'one',
+  active = {
+    left = {
+      { 'mode', 'paste' },
+      { 'gitbranch', 'readonly', 'filename', 'modified' }
+    }
+  },
+  component_function = {
+    gitbranch = 'FugitiveHead'
+  }
+}
+
+-- ========== Plugin Configurations ==========
+
+-- NvimTree
+require("nvim-tree").setup({
+  update_focused_file = {
+    enable = true,
+    update_cwd = true,
+  },
+  view = {
+    side = "right",
+    width = 30,
+  },
+  renderer = {
+    icons = {
+      show = {
+        file = true,
+        folder = true,
+        folder_arrow = true,
+        git = true,
+      },
+    },
+  },
+  filters = {
+    dotfiles = false,
+    git_ignored = false,  -- This will show node_modules!
+    custom = {},
+  },
+})
+
+-- Web Dev Icons
+require('nvim-web-devicons').setup()
+
+-- LSP Configuration
+require('lspconfig').ts_ls.setup{}
+require('lspconfig').tailwindcss.setup{}
+
+-- CMP setup (basic)
+local cmp = require('cmp')
+cmp.setup({
+  -- Basic cmp setup without tailwind colorizer for now
+})
+
+-- Treesitter
+require('nvim-treesitter.configs').setup({
+  ensure_installed = { "tsx", "javascript", "typescript", "json", "html", "css" },
+  highlight = {
+    enable = true
+  }
+})
+
+-- Context Commentstring (simplified)
+-- require('ts_context_commentstring').setup({
+--   enable_autocmd = false,
+-- })
+
+-- ========== Key Mappings ==========
+
+-- Search
+vim.keymap.set('n', '<CR>', ':nohlsearch<CR>', { silent = true })
+vim.keymap.set('n', '<Esc>', ':nohlsearch<CR>', { silent = true })
+
+-- Clipboard
+vim.keymap.set('v', '<leader>y', '"+y')
+vim.keymap.set('v', '<C-c>', '"+y')
+vim.keymap.set('v', '<leader>p', '"+p')
+vim.keymap.set('n', '<leader>y', '"+y')
+vim.keymap.set('n', '<leader>p', '"+p')
+vim.keymap.set('i', '<C-c>', '"+y')
+vim.keymap.set('i', '<C-v>', '<C-o>:put .<CR>')
+
+-- NvimTree
+vim.keymap.set('n', '<F2>', ':NvimTreeToggle<CR>')
+vim.keymap.set('n', '<C-b>', ':NvimTreeToggle<CR>')
+vim.keymap.set('n', '<leader>e', ':NvimTreeFocus<CR>')
+
+-- Buffer Navigation (Barbar)
+vim.keymap.set('n', '<leader>]', ':BufferNext<CR>')
+vim.keymap.set('n', '<leader>[', ':BufferPrevious<CR>')
+vim.keymap.set('n', '<leader>x', ':BufferClose<CR>')
+
+-- Terminal Toggle Function
+local function toggle_terminal_split()
+  -- Look for existing terminal buffer
+  for buf = 1, vim.fn.bufnr('$') do
+    if vim.fn.getbufvar(buf, '&buftype') == 'terminal' then
+      -- Check if buffer is visible
+      for win = 1, vim.fn.winnr('$') do
+        if vim.fn.winbufnr(win) == buf then
+          -- Close the window
+          vim.cmd(win .. 'wincmd c')
+          return
+        end
+      end
+      -- Terminal exists but not visible
+      vim.cmd('sbuffer ' .. buf)
+      return
+    end
+  end
+  -- No terminal found, create one
+  vim.cmd('split | terminal')
+end
+
+vim.keymap.set('n', '<leader>t', toggle_terminal_split)
+vim.keymap.set('n', '<C-t>', toggle_terminal_split)
+
+-- FZF
+vim.keymap.set('n', '<C-p>', ':Files<CR>')
+vim.keymap.set('n', '<leader>b', ':Buffers<CR>')
+
+-- CoC mappings
+vim.keymap.set('i', '<C-Space>', 'pumvisible() ? "\\<C-n>" : coc#refresh()', { expr = true, silent = true })
+vim.keymap.set('n', '<leader>h', '<cmd>call CocAction("doHover")<CR>')
+vim.keymap.set('n', 'K', '<cmd>call CocActionAsync("doHover")<CR>', { silent = true })
+
+-- Git mappings
+vim.keymap.set('n', '<leader>gs', ':Git<CR>')
+vim.keymap.set('n', '<leader>gc', ':Git commit<CR>')
+vim.keymap.set('n', '<leader>gp', ':Git push<CR>')
+
+-- Commentary
+vim.keymap.set('n', '<leader>/', ':Commentary<CR>')
+vim.keymap.set('v', '<leader>/', ':Commentary<CR>')
+
+-- Word manipulation in insert mode
+vim.keymap.set('i', '<C-e>', '<C-o>daw')  -- Delete word under cursor
+vim.keymap.set('i', '<C-d>', '<C-o>x')    -- Delete character
+vim.keymap.set('i', '<C-l>', '<C-o>D')    -- Delete to end of line
+vim.keymap.set('i', '<C-i>', '<C-o>d0')   -- Delete to start of line
+
+-- Insert mode optimization
+vim.keymap.set('i', '<C-j>', '<C-o>o')
+
+-- Save mappings
+vim.keymap.set('n', '<C-s>', ':w<CR>')
+vim.keymap.set('i', '<C-s>', '<Esc>:w<CR>')
+
+-- Save and quit
+vim.keymap.set('n', '<C-q>', ':wq<CR>')
+vim.keymap.set('i', '<C-q>', '<Esc>:wq<CR>')
+
+-- Window navigation
+vim.keymap.set('n', '<C-1>', '1<C-w>w')
+vim.keymap.set('n', '<C-2>', '2<C-w>w')
+vim.keymap.set('n', '<C-3>', '3<C-w>w')
+vim.keymap.set('n', '<C-4>', '4<C-w>w')
+
+-- Custom duplicate file function
+vim.keymap.set('n', '<leader>d', function()
+  local src = vim.fn.expand('%')
+  local dest = vim.fn.input('Duplicate to: ', src)
+  if dest ~= '' then
+    vim.cmd('!cp ' .. src .. ' ' .. dest)
+  end
+end)
+
+-- ========== Autocommands ==========
+
+-- Auto-create directories on save
+vim.api.nvim_create_augroup('AutoMkdir', { clear = true })
+vim.api.nvim_create_autocmd('BufWritePre', {
+  group = 'AutoMkdir',
+  callback = function()
+    local dir = vim.fn.expand('<afile>:p:h')
+    if not vim.fn.isdirectory(dir) then
+      vim.fn.mkdir(dir, 'p')
+    end
+  end
+})
+
+-- Format files on save
+vim.api.nvim_create_autocmd('BufWritePre', {
+  pattern = {'*.py', '*.lua', '*.rs', '*.go', '*.java'},
+  callback = function()
+    pcall(function() vim.fn.CocAction('format') end)
+  end
+})
+
+-- Prettier on save for web files
+vim.api.nvim_create_autocmd('BufWritePre', {
+  pattern = {'*.tsx', '*.ts', '*.js', '*.jsx', '*.json', '*.css', '*.md'},
+  command = 'PrettierAsync'
+})
+
+-- Set filetype for tsx files
+vim.api.nvim_create_autocmd({'BufRead', 'BufNewFile'}, {
+  pattern = '*.tsx',
+  command = 'set filetype=typescriptreact'
+})
+
+-- Comment string for JS/TS files
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = {'javascript', 'typescript', 'javascriptreact', 'typescriptreact'},
+  callback = function()
+    vim.bo.commentstring = '{/* %s */}'
+  end
+})
+
+-- ========== Additional Settings ==========
+
+-- FZF runtime path
+vim.opt.runtimepath:append('~/.fzf')
+
+-- Create Prettier command
+vim.api.nvim_create_user_command('Prettier', function()
+  vim.fn.CocAction('runCommand', 'prettier.formatFile')
+end, {})
+
+-- Helper function for CoC tab completion
+_G.check_back_space = function()
+  local col = vim.fn.col('.') - 1
+  return col == 0 or vim.fn.getline('.'):sub(col, col):match('%s') ~= nil
+end

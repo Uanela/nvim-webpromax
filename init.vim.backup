@@ -1,0 +1,576 @@
+" Basic settings
+set nocompatible
+set number
+set foldmethod=manual
+set signcolumn=yes
+set mouse=a
+set clipboard=unnamed
+set tabstop=2
+set shiftwidth=2
+set expandtab
+set autoindent
+set smartindent
+set wrap
+set encoding=utf-8
+set scrolloff=5
+set hidden
+set splitbelow splitright
+set lazyredraw
+set ttyfast
+syntax on
+filetype plugin indent on
+
+let mapleader = " "
+
+" ========= Vim Optimization ==========
+set history=200
+
+" ======== ScrollView Settings =======
+set signcolumn=yes
+
+
+" Search
+set incsearch
+nnoremap <CR> :nohlsearch<CR>
+nnoremap <Esc> :nohlsearch<CR>
+
+" Yank and Paste to system clipboard
+vnoremap <leader>y "+y
+vnoremap <C-c> "+y
+vnoremap <leader>p "+p
+
+nnoremap <leader>y "+y
+nnoremap <leader>p "+p
+
+inoremap <C-c> "+y
+inoremap <C-v> <C-o> :put .<CR>
+
+
+
+set wildmenu
+set wildmode=full
+" ========== Plugin Manager ==========
+"
+call plug#begin('~/.vim/plugged')
+
+" Appearance
+Plug 'itchyny/lightline.vim'
+
+" icons on Nvim Tree
+Plug 'nvim-tree/nvim-web-devicons'
+
+" File Navigation
+Plug 'nvim-tree/nvim-tree.lua'
+Plug 'romgrk/barbar.nvim'
+
+" Fuzzy Finder
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
+
+" Git
+Plug 'tpope/vim-fugitive'
+Plug 'airblade/vim-gitgutter'
+
+" LSP & Completion
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
+" Commenting
+Plug 'tpope/vim-commentary'
+Plug 'JoosepAlviste/nvim-ts-context-commentstring'
+
+" Language Support
+Plug 'sheerun/vim-polyglot'
+Plug 'leafgarland/typescript-vim'
+
+" Text Objects
+Plug 'kana/vim-textobj-user'
+Plug 'kana/vim-textobj-function'
+Plug 'thinca/vim-textobj-function-javascript'
+
+" Misc
+Plug 'editorconfig/editorconfig-vim'
+Plug 'jiangmiao/auto-pairs'
+
+Plug 'dracula/vim', { 'as': 'dracula' }
+" Plug "joshdick/onedark.vim", {'as': 'onedark'}
+Plug 'nvim-tree/nvim-web-devicons'
+Plug 'neovim/nvim-lspconfig'
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+
+" post install (yarn install | npm install) then load plugin only for editing supported files
+Plug 'prettier/vim-prettier', { 'do': 'npm install --frozen-lockfile --production' }
+
+Plug 'olimorris/onedarkpro.nvim'
+
+" React snipets not workig yet
+Plug 'SirVer/ultisnips'
+Plug 'mlaursen/vim-react-snippets'
+
+
+" TailwindCSS inteliSense
+Plug 'hrsh7th/nvim-cmp'
+Plug 'roobert/tailwindcss-colorizer-cmp.nvim'
+
+Plug '3rd/image.nvim'
+
+" To use with firenvim on firefox
+Plug 'glacambre/firenvim', { 'do': { _ -> firenvim#install(0) } }
+
+" To have multi-cursor just like <C-d> on VSCode
+Plug 'mg979/vim-visual-multi', {'branch': 'master'}
+
+" To use Project global search like in vscode
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.5' }
+
+" Nvim-scrollview to show Diagnostics
+Plug 'dstein64/nvim-scrollview'
+
+" Material icons
+Plug 'DaikyXendo/nvim-material-icon'
+
+" For handling all text in current buffer
+Plug 'kana/vim-textobj-entire'
+Plug 'kana/vim-textobj-user'
+
+" Prisma syntax highlighting
+Plug 'prisma/vim-prisma', { 'for': 'prisma' }
+
+call plug#end()
+" ========== Theme ==========
+set termguicolors
+colorscheme onedark 
+
+" Custom colors to match VS Code One Dark Pro Darker
+function! MyVSCodeColors()
+  " Background and foreground
+  highlight Normal guibg=none guifg=#d1d1d1
+  
+ " Make inactive windows match active ones
+  highlight NormalNC guibg=none guifg=#d1d1d1
+
+  " Line numbers
+  highlight LineNr guifg=#7b8baa guibg=NONE
+
+  " Make line numbers consistent across windows
+  highlight LineNrNC guifg=#7b8baa guibg=NONE
+  highlight CursorLineNr guifg=#cfcfcf guibg=NONE
+  
+  " Current line highlight
+  highlight CursorLine guibg=#0e0e0e
+  
+  " Comments with transparency effect
+  highlight Comment guifg=#5c6370 gui=italic
+  
+  " Keywords (if, else, function, etc.)
+  highlight Keyword guifg=#c678dd
+  highlight Statement guifg=#c678dd
+  highlight Conditional guifg=#c678dd
+  highlight Repeat guifg=#c678dd
+  
+  " Strings
+  highlight String guifg=#98c379
+  highlight Character guifg=#98c379
+  
+  " Functions
+  highlight Function guifg=#61afef
+  
+  " Variables and identifiers
+  highlight Identifier guifg=#e06c75
+  
+  " Constants and numbers
+  highlight Constant guifg=#d19a66
+  highlight Number guifg=#d19a66
+  highlight Boolean guifg=#d19a66
+  
+  " Types
+  highlight Type guifg=#e5c07b
+  highlight StorageClass guifg=#e5c07b
+  
+  " Operators
+  highlight Operator guifg=#56b6c2
+  
+  " Preprocessor
+  highlight PreProc guifg=#c678dd
+  
+  " Special characters
+  highlight Special guifg=#c678dd
+  
+  " Search highlighting
+  highlight Search guibg=#e5c07b guifg=#282c34
+  highlight IncSearch guibg=#61afef guifg=#282c34
+  
+  " Visual selection
+  highlight Visual guibg=#3e4451
+  
+  " Status line
+  highlight StatusLine guibg=#3e4451 guifg=#abb2bf
+  highlight StatusLineNC guibg=#2c323c guifg=#5c6370
+  
+  " Vertical split
+  highlight VertSplit guifg=#3e4451 guibg=NONE
+  
+  " Popup menu
+  highlight Pmenu guibg=#2c323c guifg=#abb2bf
+  highlight PmenuSel guibg=#3e4451 guifg=#abb2bf
+  highlight PmenuSbar guibg=#3e4451
+  highlight PmenuThumb guibg=#5c6370
+  
+  " Indent guides (if you have indentLine plugin)
+  highlight IndentGuidesOdd guibg=#1e2127
+  highlight IndentGuidesEven guibg=#262a33
+  
+  " Git gutter colors
+  highlight GitGutterAdd guifg=#98c379
+  highlight GitGutterChange guifg=#e5c07b
+  highlight GitGutterDelete guifg=#e06c75
+  
+  " Diagnostic colors (for LSP/CoC)
+  highlight DiagnosticError guifg=#e06c75
+  highlight DiagnosticWarn guifg=#e5c07b
+  highlight DiagnosticInfo guifg=#61afef
+  highlight DiagnosticHint guifg=#56b6c2
+  
+  " CoC specific highlights
+  highlight CocErrorSign guifg=#e06c75
+  highlight CocWarningSign guifg=#e5c07b
+  highlight CocInfoSign guifg=#61afef
+  highlight CocHintSign guifg=#56b6c2
+  
+  " Matching parentheses
+  highlight MatchParen guibg=#3e4451 guifg=#61afef gui=bold
+  
+  " Folded text
+  highlight Folded guibg=#2c323c guifg=#5c6370
+  
+  " Tab line
+  highlight TabLine guibg=#2c323c guifg=#5c6370
+  highlight TabLineFill guibg=#2c323c
+  highlight TabLineSel guibg=#3e4451 guifg=#abb2bf
+
+  " Make end of buffer consistent
+  highlight EndOfBuffer guifg=none guibg=none
+  highlight EndOfBufferNC guifg=none guibg=none
+
+  " To add colors to scrollview highlight
+  highlight ScrollViewDiagnosticError guibg=Red
+  highlight ScrollViewDiagnosticWarn guibg=Yellow
+
+endfunction
+
+" Apply the custom colors after any colorscheme change
+autocmd ColorScheme * call MyVSCodeColors()
+call MyVSCodeColors()
+
+" Configure lightline to match the theme
+let g:lightline = {
+      \ 'colorscheme': 'one',
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ],
+      \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
+      \ },
+      \ 'component_function': {
+      \   'gitbranch': 'FugitiveHead'
+      \ },
+      \ }
+
+" " ========== NvimTree ==========
+lua << EOF
+require("nvim-tree").setup({
+  update_focused_file = {
+    enable = true,
+    update_cwd = true,
+  },
+  view = {
+    side = "right",
+    width = 30,
+  },
+  renderer = {
+    icons = {
+      show = {
+        file = true,
+        folder = true,
+        folder_arrow = true,
+        git = true,
+      },
+    },
+  },
+})
+
+require('nvim-web-devicons').setup()
+
+require'lspconfig'.ts_ls.setup({
+  on_attach = function(client, bufnr)
+
+  local signs = {
+    Error = " ",
+    Warn  = " ",
+    Hint  = " ",
+    Info  = " ",
+  }
+
+  for type, icon in pairs(signs) do
+    local hl = "DiagnosticSign" .. type
+    vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
+  end
+
+    -- Optional: refresh scrollview when diagnostics change
+    vim.api.nvim_create_autocmd({ "BufEnter", "CursorMoved", "DiagnosticChanged" }, {
+      buffer = bufnr,
+      callback = function()
+        vim.cmd("ScrollViewRefresh")
+      end,
+    })
+  end,
+})
+
+require('lspconfig').tailwindcss.setup{}
+
+require("tailwindcss-colorizer-cmp").setup({
+  color_square_width = 2,
+})
+
+local cmp = require'cmp'
+cmp.setup {
+  formatting = {
+    format = require("tailwindcss-colorizer-cmp").formatter
+  }
+}
+
+require'nvim-treesitter.configs'.setup {
+  ensure_installed = { "tsx", "javascript", "typescript", "json", "html", "css" },
+  highlight = {
+    enable = true
+  }
+}
+
+require('ts_context_commentstring').setup {
+  enable_autocmd = false,
+}
+
+
+vim.keymap.set('n', '<leader>d', function() 
+  local src = vim.fn.expand('%')
+  local dest = vim.fn.input('Duplicate to: ', src)
+  vim.cmd('!cp ' .. src .. ' ' .. dest)
+end)
+
+vim.keymap.set('n', '<leader>cc', function()
+  require("nvim-tree.api").tree.collapse_all()
+end)
+
+
+require('telescope').setup{
+  defaults = {
+    vimgrep_arguments = {
+      'rg',
+      '--hidden',
+      '--glob=!**/.git/*',
+      '--glob=!**/node_modules/*',
+      '--glob=!**/dist/*',
+      '--glob=!**/build/*',
+      '--glob=!**/.build/*',
+      '--no-heading',
+      '--with-filename',
+      '--line-number',
+      '--column',
+      '--smart-case'
+    },
+  }
+}
+
+require('scrollview').setup({
+  -- current_only = true,
+  signs_on_startup = {'diagnostics'},
+  marks
+})
+
+require('nvim-web-devicons').setup{}
+
+vim.diagnostic.config({
+  virtual_text = true,
+  signs = true,
+  underline = true,
+  update_in_insert = false,
+  severity_sort = true,
+  -- update_focused_file = true
+})
+vim.fn.sign_define("DiagnosticSignError", { text = "", texthl = "DiagnosticSignError" })
+vim.fn.sign_define("DiagnosticSignWarn",  { text = "", texthl = "DiagnosticSignWarn" })
+vim.fn.sign_define("DiagnosticSignHint",  { text = "", texthl = "DiagnosticSignHint" })
+vim.fn.sign_define("DiagnosticSignInfo",  { text = "", texthl = "DiagnosticSignInfo" })
+
+vim.keymap.set('n', 'd[', vim.diagnostic.goto_prev, {desc = "Go to previous diagnostic"})
+vim.keymap.set('n', 'd]', vim.diagnostic.goto_next, {desc = "Go to next diagnostic"})
+vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, {desc = "Show diagnostics"})
+vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = "Diagnostics to Loclist" })
+
+require('lspconfig').prismals = {
+  cmd = { "prisma-language-server", "--stdio" },
+  filetypes = { "prisma" },
+  root_dir = require('lspconfig.util').root_pattern(".git", "package.json", "prisma"),
+  -- on_attach = function(client, bufnr)
+  --   -- Auto-format Prisma files on save
+  --   vim.api.nvim_create_autocmd("BufWritePre", {
+  --     buffer = bufnr,
+  --     callback = function()
+  --       vim.lsp.buf.format({ bufnr = bufnr })
+  --     end,
+  --   })
+  -- end,
+}
+
+EOF
+
+" NvimTree keymaps
+nnoremap <F2> :NvimTreeToggle<CR>
+nnoremap <C-b> :NvimTreeToggle<CR>
+nnoremap <leader>b :NvimTreeFocus<CR>
+
+" ========== Buffer Navigation (Barbar) ==========
+nnoremap <leader>] :BufferNext<CR>
+nnoremap <leader>[ :BufferPrevious<CR>
+nnoremap <leader>x :BufferClose:<CR>
+" nnoremap <Tab> :bnext<CR>
+" nnoremap <S-Tab> :bprevious<CR>
+
+" ========== Terminal ==========
+function! ToggleTerminalSplit()
+  " Look for an existing terminal buffer
+  for buf in range(1, bufnr('$'))
+    if getbufvar(buf, '&buftype') ==# 'terminal'
+      " Check if this buffer is visible in any window
+      for win in range(1, winnr('$'))
+        if winbufnr(win) == buf
+          " Close the window showing the terminal
+          exec win . 'wincmd c'
+          return
+        endif
+      endfor
+      " Terminal exists but not visible, show it
+      exec 'sbuffer' buf
+      return
+    endif
+  endfor
+  " No terminal buffer found, create one
+  split | terminal
+endfunction
+
+nnoremap <leader>t :call ToggleTerminalSplit()<CR>
+nnoremap <C-t> :call ToggleTerminalSplit()<CR>
+
+" ========== FZF ==========
+set rtp+=~/.fzf
+nnoremap <C-p> :call fzf#run(fzf#wrap({'options': '--no-preview'}))<CR>
+" nnoremap <leader>b :call fzf#run(fzf#wrap({'sink*': 'Buffers', 'options': '--no-preview'}))<CR>
+
+" ========== coc.nvim ==========
+inoremap <silent><expr> <C-Space>
+    \ pumvisible() ? "\<C-n>" :
+    \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])<CR>" :
+    \ CheckBackspace() ? "\<Tab>" :
+    \ coc#refresh()
+" inoremap <silent><expr> <C-Space> coc#refresh()
+nnoremap <leader>h :call CocAction('doHover')<CR>
+
+function! CheckBackspace() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+nnoremap <silent> K :call CocActionAsync('doHover')<CR>
+autocmd BufWritePre *.py,*.lua,*.rs,*.go,*.java :silent! call CocAction('format')
+" autocmd BufWritePre *.ts,*.tsx,*.js,*.jsx,*.py,*.lua,*.rs,*.go,*.java :silent! call CocAction('runCommand', 'prettier.formatFile')
+au BufRead,BufNewFile *.tsx set filetype=typescriptreact
+autocmd BufWritePre *.tsx,*.ts,*.js,*.jsx,*.json,*.css,*.md :PrettierAsync
+command! -nargs=0 Prettier :call CocAction('runCommand', 'prettier.formatFile')
+
+" ========== Git ==========
+nmap <leader>gs :Git<CR>
+nmap <leader>gc :Git commit<CR>
+nmap <leader>gp :Git push<CR>
+
+" ========== Commentary ==========
+nmap <leader>/ :Commentary<CR>
+vmap <leader>/ :Commentary<CR>
+
+
+" ========== Word manipulation ======
+" Deletes entire word under cursor
+inoremap <C-e> <C-o>daw
+" Works like <Del>
+inoremap <C-d> <C-o>x
+" Deletes to end of Line
+inoremap <C-l> <C-o>D
+" Deletes to start of line
+inoremap <C-i> <C-o>d0
+" inoremap <C-leader> <Esc>gccA
+" inoremap <C-/> <C-[><leader>/A
+
+" ========= Insert Mode Optimization ===
+inoremap <C-j> <C-o>o
+
+
+" Map Ctrl-s to save in normal and insert mode
+nnoremap <C-s> :w<CR>
+inoremap <C-s> <Esc>:w<CR>
+
+" Ctrl-q to save and quit
+nnoremap <C-q> :wq<CR>
+inoremap <C-q> <Esc>:wq<CR>
+
+
+" Automatically create missing folders on :w
+augroup AutoMkdir
+  autocmd!
+  autocmd BufWritePre * call s:mkdir_p(expand('<afile>:p:h'))
+augroup END
+
+function! s:mkdir_p(dir)
+  if !isdirectory(a:dir)
+    call mkdir(a:dir, 'p')
+  endif
+endfunction
+
+
+" Window navigation like VS Code
+nnoremap <C-1> 1<C-w>w
+nnoremap <C-2> 2<C-w>w
+nnoremap <C-3> 3<C-w>w
+nnoremap <C-4> 4<C-w>w
+
+
+" Commenting
+autocmd FileType javascript,typescript,javascriptreact,typescriptreact setlocal commentstring={/*\ %s\ */}
+
+" Preventing fzf from previewing files when searching
+let $FZF_DEFAULT_OPTS = '--no-preview'
+
+" Adding <C-F> to globally search content on project
+nnoremap <C-F> :Telescope live_grep<CR>
+
+" Detect .prisma files as prisma
+autocmd BufRead,BufNewFile *.prisma set filetype=prisma
+
+" Autoformat on save using Prisma CLI
+" augroup PrismaFormat
+"   autocmd!
+"   autocmd BufWritePre *.prisma silent! execute '!prisma format --schema %' | edit!
+" augroup END
+
+
+" augroup PrismaFormat
+"   autocmd!
+"   autocmd BufWritePost *.prisma call s:PrismaSafeFormat(expand('%'))
+" augroup END
+
+" function! s:PrismaSafeFormat(filepath)
+"   let l:cmd = 'prisma validate --schema ' . shellescape(a:filepath)
+"   let l:result = system(l:cmd)
+"   if v:shell_error
+"     echohl WarningMsg | echo "⚠ Prisma schema has errors. Skipping format." | echohl None
+"   else
+"     call system('prisma format --schema ' . shellescape(a:filepath))
+"     edit!
+"   endif
+" endfunction

@@ -1,0 +1,8 @@
+{
+  "prisma": {
+    "enableDiagnostics": true
+  },
+  "typescript.suggest.completeFunctionCalls": false,
+  "javascript.suggest.completeFunctionCalls": false,
+  "typescript.suggest.autoImports": true
+}

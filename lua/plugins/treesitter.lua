@@ -47,8 +47,8 @@ return {
             ["aa"] = "@argument.outer",
             ["ia"] = "@argument.inner",
 
-            ["al"] = "@loop.outer",
-            ["il"] = "@loop.inner",
+            -- ["al"] = "@loop.outer",
+            -- ["il"] = "@loop.inner",
 
             ["aC"] = "@conditional.outer",
             ["iC"] = "@conditional.inner",

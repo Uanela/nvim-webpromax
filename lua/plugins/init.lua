@@ -18,17 +18,9 @@ return {
   },
 
   -- Icons
-  { "nvim-tree/nvim-web-devicons" },
+  -- { "nvim-tree/nvim-web-devicons" },
 
-  -- File Navigation
-  {
-    "nvim-tree/nvim-tree.lua",
-    dependencies = { "nvim-tree/nvim-web-devicons" },
-    config = function()
-      require("plugins.nvim-tree")
-    end
-  },
-
+  -- -- File Navigation
   {
     "romgrk/barbar.nvim",
     dependencies = { "nvim-tree/nvim-web-devicons" },
@@ -122,12 +114,12 @@ return {
   {
     "prettier/vim-prettier",
     build = "npm install --frozen-lockfile --production",
-    ft = { "javascript", "typescript", "css", "less", "scss", "json", "graphql", "markdown", "vue", "yaml", "html" }
+    ft = { "javascript", "typescript", "css", "less", "scss", "json", "graphql", "markdown", "vue", "yaml", "html", "lua"}
   },
 
   -- Snippets
   { "SirVer/ultisnips" },
-  { "mlaursen/vim-react-snippets" },
+  -- { "mlaursen/vim-react-snippets" },
 
   -- TailwindCSS
   { "hrsh7th/nvim-cmp" },

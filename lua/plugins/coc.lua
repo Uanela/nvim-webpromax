@@ -24,5 +24,10 @@ return {
     
     -- CoC commands
     vim.api.nvim_create_user_command("Prettier", "call CocAction('runCommand', 'prettier.formatFile')", {})
-  end,
+
+   -- Trigger hover and jump to it in one go
+   vim.keymap.set('n', '<C-k>', function()
+     vim.fn.CocActionAsync('doHover')
+     vim.cmd('wincmd W')
+   end, { silent = true })  end,
 }

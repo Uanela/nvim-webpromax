@@ -28,6 +28,11 @@ keymap("n", "<C-1>", "1<C-w>w", opts)
 keymap("n", "<C-2>", "2<C-w>w", opts)
 keymap("n", "<C-3>", "3<C-w>w", opts)
 keymap("n", "<C-4>", "4<C-w>w", opts)
+keymap("n", "<C-5>", "5<C-w>w", opts)
+keymap("n", "<C-6>", "6<C-w>w", opts)
+keymap("n", "<C-7>", "7<C-w>w", opts)
+keymap("n", "<C-8>", "8<C-w>w", opts)
+keymap("n", "<C-9>", "9<C-w>w", opts)
 
 -- Word manipulation in insert mode
 keymap("i", "<C-e>", "<C-o>daw", opts)
@@ -36,13 +41,13 @@ keymap("i", "<C-l>", "<C-o>D", opts)
 keymap("i", "<C-i>", "<C-o>d0", opts)
 keymap("i", "<C-j>", "<C-o>o", opts)
 
--- Terminal toggle
-keymap("n", "<leader>t", function()
-  require("config.terminal").toggle()
-end, opts)
-keymap("n", "<C-t>", function()
-  require("config.terminal").toggle()
-end, opts)
+-- -- Terminal toggle
+-- keymap("n", "<leader>t", function()
+--   require("config.terminal").toggle()
+-- end, opts)
+-- keymap("n", "<C-t>", function()
+--   require("config.terminal").toggle()
+-- end, opts)
 
 -- File tree
 keymap("n", "<F2>", ":NvimTreeToggle<CR>", opts)

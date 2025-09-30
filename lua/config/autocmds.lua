@@ -26,7 +26,7 @@ autocmd("BufWritePre", {
 -- Prettier auto-format (with safety check)
 autocmd("BufWritePre", {
   group = "AutoFormat",
-  pattern = { "*.tsx", "*.ts", "*.js", "*.jsx", "*.json", "*.css", "*.md" },
+  pattern = { "*.tsx", "*.ts", "*.js", "*.jsx", "*.json", "*.css", "*.md", "*.prisma", "*.lua", "*.py" },
   callback = function()
     -- Check if CoC is available and the command exists
     if vim.fn.exists(':PrettierAsync') == 2 then
@@ -90,4 +90,3 @@ vim.api.nvim_create_autocmd("FileType", {
     require("nvim-tree.api").tree.change_root_to_node()
   end,
 })
-

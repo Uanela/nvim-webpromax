@@ -9,7 +9,7 @@ return {
     },
     config = function()
       local lspconfig = require('lspconfig')
-      
+
       -- Diagnostic signs
       local signs = {
         Error = "",
@@ -22,7 +22,7 @@ return {
         local hl = "DiagnosticSign" .. type
         vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
       end
-      
+
       -- Diagnostic configuration
       vim.diagnostic.config({
         virtual_text = true,
@@ -31,16 +31,16 @@ return {
         update_in_insert = false,
         severity_sort = true,
       })
-      
+
       -- TypeScript/JavaScript LSP
       lspconfig.ts_ls.setup({
-        on_attach = function(client, bufnr)
+        on_attach = function()
         end,
         capabilities = require("cmp_nvim_lsp").default_capabilities()
       })
-      
+
       -- TailwindCSS LSP
-      lspconfig.tailwindcss.setup{
+      lspconfig.tailwindcss.setup {
         cmd = { "tailwindcss-language-server", "--stdio" },
         filetypes = { "html", "css", "scss", "javascript", "javascriptreact", "typescript", "typescriptreact", "vue" },
         root_dir = lspconfig.util.root_pattern("tailwind.config.js", "package.json", ".git"),
@@ -48,9 +48,6 @@ return {
       }
 
       local capabilities = vim.lsp.protocol.make_client_capabilities()
-
-      -- Optional: Configure completion capabilities for nvim-cmp if used
-      -- capabilities.textDocument.completion.completionItem.snippetSupport = true
 
       lspconfig.cssls.setup({
         capabilities = capabilities,
@@ -65,13 +62,8 @@ return {
             validate = true, -- Enable SCSS validation
           },
         },
-        -- Optional: on_attach function for buffer-local setup (e.g., keybindings)
-        -- on_attach = function(client, bufnr)
-        --   -- Example: Set keybindings for LSP actions
-        --   vim.keymap.set("n", "gd", vim.lsp.buf.definition, { buffer = bufnr })
-        -- end,
       })
-      
+
       -- Prisma LSP
       lspconfig.prismals.setup({
         cmd = { "prisma-language-server", "--stdio" },
@@ -81,27 +73,40 @@ return {
 
       lspconfig.emmet_language_server.setup({
         filetypes = {
-            "astro",
-            "css",
-            "eruby",
-            "html",
-            "javascript",
-            "javascriptreact",
-            "less",
-            "php",
-            "pug",
-            "sass",
-            "scss",
-            "typescriptreact"
-          },
+          "astro",
+          "css",
+          "eruby",
+          "html",
+          "javascript",
+          "javascriptreact",
+          "less",
+          "php",
+          "pug",
+          "sass",
+          "scss",
+          "typescriptreact"
+        },
       })
       --
-    -- Django Template LSP
-    lspconfig.django_template_lsp.setup {
-      cmd = {"django-template-lsp"},
-      filetypes = {"html", "htmldjango"}
-    }
+      -- Django Template LSP
+      lspconfig.django_template_lsp.setup {
+        cmd = { "django-template-lsp" },
+        filetypes = { "html", "htmldjango" }
+      }
 
+      lspconfig.lua_ls.setup({
+        capabilities = capabilities,
+        settings = {
+          Lua = {
+            workspace = {
+              checkThirdParty = false
+            },
+            telemetry = {
+              enable = false
+            },
+          }
+        }
+      })
     end,
   },
   {
@@ -115,8 +120,7 @@ return {
     "williamboman/mason-lspconfig.nvim",
     config = function()
       require("mason-lspconfig").setup({
-        ensure_installed = { "ts_ls", "tailwindcss", "prismals", "emmet_language_server", "cssls", "django_template_lsp" },
-
+        ensure_installed = { "ts_ls", "tailwindcss", "prismals", "emmet_language_server", "cssls", "lua_ls" },
       })
     end,
   },

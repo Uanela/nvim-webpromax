@@ -7,9 +7,9 @@ return {
   },
   config = function()
     require('nvim-treesitter.configs').setup {
-      ensure_installed = { 
-        "tsx", "javascript", "typescript", "json", "html", "css", 
-        "lua", "python", "rust", "go", "prisma" 
+      ensure_installed = {
+        "tsx", "javascript", "typescript", "json", "html", "css",
+        "lua", "python", "rust", "go", "prisma"
       },
       highlight = {
         enable = true,
@@ -44,11 +44,11 @@ return {
             ["ap"] = "@parameter.outer",
             ["ip"] = "@parameter.inner",
 
-            ["aa"] = "@argument.outer",
-            ["ia"] = "@argument.inner",
+            -- ["aa"] = "@argument.outer",
+            -- ["ia"] = "@argument.inner",
 
-            -- ["al"] = "@loop.outer",
-            -- ["il"] = "@loop.inner",
+            ["aa"] = "@loop.outer",
+            ["ia"] = "@loop.inner",
 
             ["aC"] = "@conditional.outer",
             ["iC"] = "@conditional.inner",
@@ -61,9 +61,9 @@ return {
 
             ["am"] = "@comment.outer",
             ["im"] = "@comment.inner",
+          },
         },
       },
-    },
-  }
+    }
   end,
 }

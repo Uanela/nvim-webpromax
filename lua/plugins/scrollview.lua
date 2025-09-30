@@ -3,15 +3,15 @@ return {
   event = { "BufReadPost", "BufNewFile" },
   config = function()
     require('scrollview').setup({
-       -- Configure diagnostic signs
+      -- Configure diagnostic signs
       diagnostics_error_symbol = "",
       diagnostics_warn_symbol  = "",
       diagnostics_info_symbol  = "",
       diagnostics_hint_symbol  = "",
-      signs_on_startup = {'diagnostics'},
-      diagnostics_severities = {vim.diagnostic.severity.ERROR, vim.diagnostic.severity.WARN, vim.diagnostic.severity.INFO, vim.diagnostic.severity.HINT}
+      signs_on_startup         = { 'diagnostics' },
+      diagnostics_severities   = { vim.diagnostic.severity.ERROR, vim.diagnostic.severity.WARN, vim.diagnostic.severity.INFO, vim.diagnostic.severity.HINT }
     })
-    
+
     -- Configure diagnostic virtual text to wrap
     vim.diagnostic.config({
       virtual_text = {

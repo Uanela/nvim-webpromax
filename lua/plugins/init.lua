@@ -1,5 +1,3 @@
--- Plugin specifications for lazy.nvim
-
 return {
   -- Appearance
   {
@@ -16,9 +14,6 @@ return {
       }
     end
   },
-
-  -- Icons
-  -- { "nvim-tree/nvim-web-devicons" },
 
   -- -- File Navigation
   {
@@ -82,7 +77,7 @@ return {
   { "leafgarland/typescript-vim" },
 
   -- Text Objects
-  { "kana/vim-textobj-user", lazy = false, priority = 1000 },
+  { "kana/vim-textobj-user",     lazy = false, priority = 1000 },
   { "kana/vim-textobj-entire" },
   {
     "kana/vim-textobj-function",
@@ -90,12 +85,12 @@ return {
     lazy = false,
     config = function()
       -- Ensure the plugin loads properly
-        vim.cmd("runtime! plugin/textobj/function.vim")
-      end,
+      vim.cmd("runtime! plugin/textobj/function.vim")
+    end,
   },
   {
     "thinca/vim-textobj-function-javascript",
-    dependencies = { 
+    dependencies = {
       "kana/vim-textobj-user",
       "kana/vim-textobj-function"
     },
@@ -107,19 +102,19 @@ return {
   { "jiangmiao/auto-pairs" },
 
   -- Themes
-  { "dracula/vim", name = "dracula" },
+  { "dracula/vim",                  name = "dracula" },
   { "olimorris/onedarkpro.nvim" },
+  { "ghifarit53/tokyonight-vim" },
 
   -- Prettier
   {
     "prettier/vim-prettier",
     build = "npm install --frozen-lockfile --production",
-    ft = { "javascript", "typescript", "css", "less", "scss", "json", "graphql", "markdown", "vue", "yaml", "html", "lua"}
+    ft = { "javascript", "typescript", "css", "less", "scss", "json", "graphql", "markdown", "vue", "yaml", "html", "lua" }
   },
 
   -- Snippets
   { "SirVer/ultisnips" },
-  -- { "mlaursen/vim-react-snippets" },
 
   -- TailwindCSS
   { "hrsh7th/nvim-cmp" },
@@ -158,5 +153,5 @@ return {
   { "DaikyXendo/nvim-material-icon" },
 
   -- Prisma
-  { "prisma/vim-prisma", ft = "prisma" },
+  { "prisma/vim-prisma",            ft = "prisma" },
 }

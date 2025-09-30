@@ -107,9 +107,8 @@ local function apply_custom_colors()
     ScrollViewDiagnosticInfo = { bg = "Blue" },
     ScrollViewDiagnosticHint = { bg = "Blue" },
 
-    -- NvimTreeFolderIcon = { fg = "#888888" }
-    -- NvimTreeFolderName = { fg = "#ffffff" }
-
+    NvimTreeFolderIcon = { fg = "#888888" },
+    NvimTreeFolderName = { fg = "#ffffff" }
   }
 
 

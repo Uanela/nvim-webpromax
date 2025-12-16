@@ -9,7 +9,7 @@ return {
     require('nvim-treesitter.configs').setup {
       ensure_installed = {
         "tsx", "javascript", "typescript", "json", "html", "css",
-        "lua", "python", "rust", "go", "prisma"
+        "lua", "python", "rust", "go", "prisma", "c_sharp"
       },
       highlight = {
         enable = true,

@@ -11,20 +11,38 @@ return {
     require("neotest").setup({
       adapters = {
         require("neotest-jest")({
-          jestCommand = require("neotest-jest.jest-util").getJestCommand(vim.fn.expand("%:p:h")),
-          jestConfigFile = "jest.config.js",
-          env = { CI = true },
-          cwd = function(path)
-            return vim.fn.getcwd()
-          end,
+          jestCommand = "npx jest", -- Use npx
+          jestConfigFile = { "jest.config.ts", "jest.config.js", "jest.config.json" },
+          cwd = vim.fn.getcwd(),
         }),
       },
     })
   end,
   keys = {
-    { "<leader>tr", function() require("neotest").run.run() end,                   desc = "Run nearest test" },
-    { "<leader>tf", function() require("neotest").run.run(vim.fn.expand("%")) end, desc = "Run current file" },
-    { "<leader>ts", function() require("neotest").summary.toggle() end,            desc = "Toggle test summary" },
-    { "<leader>to", function() require("neotest").output.open() end,               desc = "Show test output" },
+    {
+      "<leader>tr",
+      function()
+        -- Only run if in a test file
+        local file = vim.fn.expand("%")
+        if not file:match("%.test%.ts$") and not file:match("%.spec%.ts$") then
+          print("Not a test file:", file)
+          return
+        end
+        require("neotest").run.run()
+      end,
+      desc = "Run nearest test"
+    },
+    {
+      "<leader>tf",
+      function()
+        local file = vim.fn.expand("%")
+        if not file:match("%.test%.ts$") and not file:match("%.spec%.ts$") then
+          print("Not a test file:", file)
+          return
+        end
+        require("neotest").run.run(file)
+      end,
+      desc = "Run current file"
+    },
   },
 }

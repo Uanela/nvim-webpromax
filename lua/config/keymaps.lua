@@ -117,7 +117,19 @@ map('n', 'x', '"_x', opts)
 map('v', 'x', '"_x', opts)
 
 -- Restore real 'cut' behavior under <leader>d, <leader>c, <leader>x
-vim.keymap.set({'n', 'v'}, '<leader>d', 'd', { noremap = true })
-vim.keymap.set({'n', 'v'}, '<leader>c', 'c', { noremap = true })
-vim.keymap.set({'n', 'v'}, '<leader>x', 'x', { noremap = true })
+vim.keymap.set({ 'n', 'v' }, '<leader>d', 'd', { noremap = true })
+vim.keymap.set({ 'n', 'v' }, '<leader>c', 'c', { noremap = true })
+vim.keymap.set({ 'n', 'v' }, '<leader>x', 'x', { noremap = true })
 
+-- Add to any lua config file
+vim.keymap.set("n", "<leader>tt", function()
+  local file = vim.fn.expand("%")
+  if not (file:match("%.test%.") or file:match("%.spec%.")) then
+    print("Not a test file!")
+    return
+  end
+
+  -- Simple terminal runner
+  vim.cmd("split")
+  vim.cmd("term npx jest " .. vim.fn.shellescape(file))
+end, { desc = "Run jest test file" })

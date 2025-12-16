@@ -1,24 +1,45 @@
 return {
   "hrsh7th/nvim-cmp",
-  version = "v2.*",
+  event = "InsertEnter",
   dependencies = {
+    "hrsh7th/cmp-nvim-lsp",
+    "hrsh7th/cmp-buffer",
+    "hrsh7th/cmp-path",
     "L3MON4D3/LuaSnip",
-    "mlaursen/vim-react-snippets",
-    opts = function()
-      require("vim-react-snippets").lazy_load()
+    "saadparwaiz1/cmp_luasnip",
+    {
+      "mlaursen/vim-react-snippets",
+      config = function()
+        require("vim-react-snippets").lazy_load()
+        local config = require("vim-react-snippets.config")
+        config.readonly_props = false
+      end,
+    },
+  },
+  config = function()
+    local cmp = require("cmp")
+    local luasnip = require("luasnip")
 
-      local config = require("vim-react-snippets.config")
-
-      -- if you do not want to wrap all props in `Readonly<T>`
-      config.readonly_props = false
-
-      -- if you want to use vitest instead of `@jest/globals`
-      -- config.test_framework = "vitest"
-
-      -- if you want to use a custom test renderer path instead of
-      -- `@testing-library/react`
-      -- config.test_renderer_path = "@/test-utils"
-    end
-  }
+    cmp.setup({
+      snippet = {
+        expand = function(args)
+          luasnip.lsp_expand(args.body)
+        end,
+      },
+      mapping = cmp.mapping.preset.insert({
+        ["<C-Space>"] = cmp.mapping.complete(),
+        ["<C-y>"] = cmp.mapping.confirm({ select = true }),
+        ["<C-n>"] = cmp.mapping.select_next_item(),
+        ["<C-p>"] = cmp.mapping.select_prev_item(),
+        ["<C-b>"] = cmp.mapping.scroll_docs(-4),
+        ["<C-f>"] = cmp.mapping.scroll_docs(4),
+      }),
+      sources = cmp.config.sources({
+        { name = "nvim_lsp" },
+        { name = "luasnip" },
+        { name = "buffer" },
+        { name = "path" },
+      }),
+    })
+  end,
 }
---- @param opts cmp.ConfigSchema

@@ -1,6 +1,7 @@
 local autocmd = vim.api.nvim_create_autocmd
 local augroup = vim.api.nvim_create_augroup
 
+
 -- Auto-create missing directories on save
 augroup("AutoMkdir", { clear = true })
 autocmd("BufWritePre", {
@@ -26,16 +27,21 @@ autocmd("BufWritePre", {
 -- Prettier auto-format (with safety check)
 autocmd("BufWritePre", {
   group = "AutoFormat",
-  pattern = { "*.tsx", "*.ts", "*.js", "*.jsx", "*.json", "*.css", "*.md", "*.prisma", "*.lua", "*.py" },
-  callback = function()
-    -- Check if CoC is available and the command exists
-    if vim.fn.exists(':PrettierAsync') == 2 then
+  pattern = { "*.tsx", "*.ts", "*.js", "*.jsx", "*.json", "*.css", "*.md", "*.prisma", "*.lua", "*.py", "*.go", "*.rs", "*.java" },
+  callback = function(ev)
+    local function format_with_lsp()
+      print("formatting with lsp")
+      pcall(vim.lsp.buf.format, { async = false })
+    end
+    if vim.bo[ev.buf].filetype == 'prisma' then
+      format_with_lsp()
+    elseif vim.fn.exists(':PrettierAsync') == 2 then
       vim.cmd("PrettierAsync")
     elseif vim.fn.exists(':Prettier') == 2 then
       vim.cmd("Prettier")
     else
       -- Fallback to LSP formatting if Prettier isn't available
-      pcall(vim.lsp.buf.format, { async = false })
+      format_with_lsp()
     end
   end,
 })
@@ -90,3 +96,11 @@ vim.api.nvim_create_autocmd("FileType", {
     require("nvim-tree.api").tree.change_root_to_node()
   end,
 })
+
+vim.api.nvim_create_user_command("Refresh",
+  function()
+    vim.cmd('LspRestart')
+    vim.cmd('NvimTreeRefresh')
+    vim.cmd('CocRestart')
+  end,
+  { desc = "Runs CocRestart, LspRestart and NvimTreeRefresh for a complete IDE referesh." })

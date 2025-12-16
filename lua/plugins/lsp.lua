@@ -9,6 +9,7 @@ return {
     },
     config = function()
       local lspconfig = require('lspconfig')
+      local capabilities = vim.lsp.protocol.make_client_capabilities()
 
       -- Diagnostic signs
       local signs = {
@@ -42,15 +43,20 @@ return {
       -- TailwindCSS LSP
       lspconfig.tailwindcss.setup {
         cmd = { "tailwindcss-language-server", "--stdio" },
-        filetypes = { "html", "css", "scss", "javascript", "javascriptreact", "typescript", "typescriptreact", "vue" },
-        root_dir = lspconfig.util.root_pattern("tailwind.config.js", "package.json", ".git"),
+        filetypes = { "html", "css", "scss", "javascript", "javascriptreact", "typescript", "typescriptreact", "vue", "tsx", 'jsx' },
+        root_dir = lspconfig.util.root_pattern("tailwind.config.js", "package.json", "tailwind.config.ts", "tailwind.config.cjs", "tailwind.config.mts", ".git"),
+        on_attach = function(client, bufnr)
+          require('nvim-treesitter.configs').setup({
+            highlight = { enable = true },
+          })
+        end,
         settings = {},
+        capabilities = require("cmp_nvim_lsp").default_capabilities()
       }
 
-      local capabilities = vim.lsp.protocol.make_client_capabilities()
 
       lspconfig.cssls.setup({
-        capabilities = capabilities,
+        capabilities = require("cmp_nvim_lsp").default_capabilities(),
         settings = {
           css = {
             validate = true, -- Enable CSS validation
@@ -71,6 +77,7 @@ return {
         root_dir = lspconfig.util.root_pattern(".git", "package.json", "prisma"),
       })
 
+
       lspconfig.emmet_language_server.setup({
         filetypes = {
           "astro",
@@ -88,16 +95,29 @@ return {
         },
       })
       --
-      -- Django Template LSP
-      lspconfig.django_template_lsp.setup {
-        cmd = { "django-template-lsp" },
-        filetypes = { "html", "htmldjango" }
+      -- -- Django Template LSP
+      -- lspconfig.django_template_lsp.setup {
+      --   cmd = { "django-template-lsp" },
+      --   filetypes = { "html", "htmldjango" }
+      -- }
+
+      -- Csharp
+      lspconfig.omnisharp.setup {
+        cmd = { "omnisharp", "--languageserver", "--hostPID", tostring(vim.fn.getpid()) },
+        capabilities = require("cmp_nvim_lsp").default_capabilities()
+      }
+
+      lspconfig.razor_ls.setup {
+        capabilities = require("cmp_nvim_lsp").default_capabilities()
       }
 
       lspconfig.lua_ls.setup({
-        capabilities = capabilities,
+        capabilities = require("cmp_nvim_lsp").default_capabilities(),
         settings = {
           Lua = {
+            diagnostics = {
+              globals = { 'vim' }
+            },
             workspace = {
               checkThirdParty = false
             },
@@ -120,7 +140,7 @@ return {
     "williamboman/mason-lspconfig.nvim",
     config = function()
       require("mason-lspconfig").setup({
-        ensure_installed = { "ts_ls", "tailwindcss", "prismals", "emmet_language_server", "cssls", "lua_ls" },
+        ensure_installed = { "ts_ls", "tailwindcss", "prismals", "emmet_language_server", "cssls", "lua_ls", "omnisharp", "razor_ls" },
       })
     end,
   },

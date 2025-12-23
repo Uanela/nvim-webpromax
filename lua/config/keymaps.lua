@@ -41,16 +41,7 @@ keymap("i", "<C-l>", "<C-o>D", opts)
 keymap("i", "<C-i>", "<C-o>d0", opts)
 keymap("i", "<C-j>", "<C-o>o", opts)
 
--- -- Terminal toggle
--- keymap("n", "<leader>t", function()
---   require("config.terminal").toggle()
--- end, opts)
--- keymap("n", "<C-t>", function()
---   require("config.terminal").toggle()
--- end, opts)
-
 -- File tree
-keymap("n", "<F2>", ":NvimTreeToggle<CR>", opts)
 keymap("n", "<C-b>", ":NvimTreeToggle<CR>", opts)
 keymap("n", "<leader>b", ":NvimTreeFocus<CR>", opts)
 
@@ -58,7 +49,6 @@ keymap("n", "<leader>b", ":NvimTreeFocus<CR>", opts)
 keymap("n", "<leader>]", ":BufferNext<CR>", opts)
 keymap("n", "<leader>[", ":BufferPrevious<CR>", opts)
 keymap("n", "<leader>x", ":BufferClose<CR>", opts)
-keymap("n", "<C-x>", ":BufferClose<CR>", opts)
 
 -- Fuzzy finding
 keymap("n", "<C-p>", ":Telescope find_files<CR>", opts)
@@ -66,11 +56,11 @@ keymap("n", "<C-F>", ":Telescope live_grep<CR>", opts)
 
 -- Git
 keymap("n", "<leader>gs", ":Git<CR>", opts)
+keymap("n", "<leader>ga", ":Git add .<CR>", opts)
 keymap("n", "<leader>gc", ":Git commit<CR>", opts)
 keymap("n", "<leader>gp", ":Git push<CR>", opts)
 
 -- Commentary
-keymap("n", "<leader>/", ":Commentary<CR>", opts)
 keymap("v", "<leader>/", ":Commentary<CR>", opts)
 keymap("i", "<C-/>", ":Commentary<CR>", opts)
 
@@ -81,7 +71,6 @@ keymap("n", "<leader>e", vim.diagnostic.open_float, { desc = "Show diagnostics" 
 keymap("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Diagnostics to Loclist" })
 
 -- LSP
-keymap("n", "<leader>h", vim.lsp.buf.hover, opts)
 keymap("n", "K", vim.lsp.buf.hover, opts)
 
 -- Duplicate file

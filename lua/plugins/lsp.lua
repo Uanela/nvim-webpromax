@@ -11,27 +11,37 @@ return {
       local lspconfig = require('lspconfig')
       local capabilities = vim.lsp.protocol.make_client_capabilities()
 
+      vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action)
+
+
       -- Diagnostic signs
       local signs = {
         Error = "",
         Warn  = "",
-        Hint  = "",
-        Info  = "",
+        Hint  = "",
+        Info  = "",
       }
+
+      -- local signs = {
+      --   Error = "⏺",
+      --   Warn  = "⏺",
+      --   Hint  = "⏺",
+      --   Info  = "⏺",
+      -- }
 
       for type, icon in pairs(signs) do
         local hl = "DiagnosticSign" .. type
         vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
       end
 
-      -- Diagnostic configuration
-      vim.diagnostic.config({
-        virtual_text = true,
-        signs = true,
-        underline = true,
-        update_in_insert = false,
-        severity_sort = true,
-      })
+      -- -- Diagnostic configuration
+      -- vim.diagnostic.config({
+      --   virtual_text = false,
+      --   signs = false,
+      --   underline = true,
+      --   update_in_insert = false,
+      --   severity_sort = true,
+      -- })
 
       -- TypeScript/JavaScript LSP
       lspconfig.ts_ls.setup({
@@ -53,7 +63,6 @@ return {
         settings = {},
         capabilities = require("cmp_nvim_lsp").default_capabilities()
       }
-
 
       lspconfig.cssls.setup({
         capabilities = require("cmp_nvim_lsp").default_capabilities(),
@@ -94,12 +103,6 @@ return {
           "typescriptreact"
         },
       })
-      --
-      -- -- Django Template LSP
-      -- lspconfig.django_template_lsp.setup {
-      --   cmd = { "django-template-lsp" },
-      --   filetypes = { "html", "htmldjango" }
-      -- }
 
       -- Csharp
       lspconfig.omnisharp.setup {
@@ -108,6 +111,11 @@ return {
       }
 
       lspconfig.razor_ls.setup {
+        capabilities = require("cmp_nvim_lsp").default_capabilities()
+      }
+
+
+      lspconfig.csharp_ls.setup {
         capabilities = require("cmp_nvim_lsp").default_capabilities()
       }
 
@@ -140,7 +148,7 @@ return {
     "williamboman/mason-lspconfig.nvim",
     config = function()
       require("mason-lspconfig").setup({
-        ensure_installed = { "ts_ls", "tailwindcss", "prismals", "emmet_language_server", "cssls", "lua_ls", "omnisharp", "razor_ls" },
+        ensure_installed = { "ts_ls", "tailwindcss", "prismals", "emmet_language_server", "cssls", "lua_ls", "omnisharp" },
       })
     end,
   },

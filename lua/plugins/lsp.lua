@@ -8,7 +8,7 @@ return {
       "hrsh7th/cmp-nvim-lsp"
     },
     config = function()
-      local lspconfig = require('lspconfig')
+      local lspconfig = require("lspconfig")
       local capabilities = vim.lsp.protocol.make_client_capabilities()
 
       vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action)

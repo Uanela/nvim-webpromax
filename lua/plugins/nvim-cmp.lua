@@ -10,8 +10,17 @@ return {
     {
       "mlaursen/vim-react-snippets",
       config = function()
-        require("vim-react-snippets").lazy_load()
-        local config = require("vim-react-snippets.config")
+        local ok, plugin = pcall(require, "vim-react-snippets")
+        if not ok then
+          return
+        end
+
+        plugin.lazy_load()
+        local ok2, config = pcall(require, "vim-react-snippets.config")
+        if not ok2 then
+          return
+        end
+
         config.readonly_props = false
       end,
     },

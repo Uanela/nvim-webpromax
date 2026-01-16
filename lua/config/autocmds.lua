@@ -29,11 +29,11 @@ autocmd("BufWritePre", {
   group = "AutoFormat",
   pattern = { "*.tsx", "*.ts", "*.js", "*.jsx", "*.json", "*.css", "*.md", "*.prisma", "*.lua", "*.py", "*.go", "*.rs", "*.java" },
   callback = function(ev)
+    local filetype = vim.bo[ev.buf].filetype
     local function format_with_lsp()
-      print("formatting with lsp")
       pcall(vim.lsp.buf.format, { async = false })
     end
-    if vim.bo[ev.buf].filetype == 'prisma' then
+    if filetype == 'prisma' or filetype == 'lua' then
       format_with_lsp()
     elseif vim.fn.exists(':PrettierAsync') == 2 then
       vim.cmd("PrettierAsync")

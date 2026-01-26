@@ -31,8 +31,6 @@ keymap("n", "<C-4>", "4<C-w>w", opts)
 keymap("n", "<C-5>", "5<C-w>w", opts)
 keymap("n", "<C-6>", "6<C-w>w", opts)
 keymap("n", "<C-7>", "7<C-w>w", opts)
-keymap("n", "<C-8>", "8<C-w>w", opts)
-keymap("n", "<C-9>", "9<C-w>w", opts)
 
 -- Word manipulation in insert mode
 keymap("i", "<C-e>", "<C-o>daw", opts)

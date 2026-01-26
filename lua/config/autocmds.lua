@@ -101,6 +101,6 @@ vim.api.nvim_create_user_command("Refresh",
   function()
     vim.cmd('LspRestart')
     vim.cmd('NvimTreeRefresh')
-    vim.cmd('CocRestart')
+    -- vim.cmd('CocRestart')
   end,
-  { desc = "Runs CocRestart, LspRestart and NvimTreeRefresh for a complete IDE referesh." })
+  { desc = "Runs LspRestart and NvimTreeRefresh for a complete IDE referesh." })

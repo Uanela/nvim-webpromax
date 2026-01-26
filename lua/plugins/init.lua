@@ -32,17 +32,16 @@ return {
   },
 
   -- Git
-  { "tpope/vim-fugitive" },
   { "airblade/vim-gitgutter" },
 
   -- LSP & Completion
-  {
-    "neoclide/coc.nvim",
-    branch = "release",
-    config = function()
-      require("plugins.coc")
-    end
-  },
+  -- {
+  --   "neoclide/coc.nvim",
+  --   branch = "release",
+  --   config = function()
+  --     require("plugins.coc")
+  --   end
+  -- },
 
   -- Alternative LSP setup (choose one)
   {
@@ -104,7 +103,12 @@ return {
   -- Themes
   { "dracula/vim",                  name = "dracula" },
   { "olimorris/onedarkpro.nvim" },
-  { "ghifarit53/tokyonight-vim" },
+  {
+    "folke/tokyonight.nvim",
+    lazy = false,
+    priority = 1000,
+    opts = {},
+  },
 
   -- Prettier
   {

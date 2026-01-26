@@ -11,7 +11,7 @@ return {
       "mlaursen/vim-react-snippets",
       config = function()
         local ok, plugin = pcall(require, "vim-react-snippets")
-        if not ok then
+        if not ok or not plugin or not plugin.lazy_load then
           return
         end
 

@@ -9,7 +9,9 @@ return {
   config = function()
     local tree_opened = false
     require("nvim-tree").setup({
-
+      hijack_directories = {
+        enable = true
+      },
       renderer = {
         icons = {
           webdev_colors = true,
@@ -18,7 +20,7 @@ return {
       },
       sort_by = "case_sensitive",
       view = {
-        width = 30,
+        width = 32,
         side = "right"
       },
       filters = {

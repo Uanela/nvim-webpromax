@@ -8,6 +8,7 @@ g.maplocalleader = " "
 -- Basic settings
 opt.compatible = false
 opt.number = true
+opt.relativenumber = true
 opt.foldmethod = "manual"
 opt.signcolumn = "yes"
 opt.mouse = "a"
@@ -50,16 +51,8 @@ g.loaded_netrw = 1
 g.loaded_netrwPlugin = 1
 
 vim.opt.fillchars = {
-  eob = " ",  -- End of buffer (removes ~)
+  eob = " ", -- End of buffer (removes ~)
   fold = " ",
   foldsep = " ",
   diff = "╱",
 }
-
--- Debug working directory behavior
--- vim.api.nvim_create_autocmd("DirChanged", {
---   callback = function(args)
---     print("Directory changed to:", vim.fn.getcwd())
---     print("Trigger:", args.match)
---   end,
--- })

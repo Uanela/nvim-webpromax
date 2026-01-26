@@ -5,16 +5,14 @@ return {
     dependencies = {
       "williamboman/mason.nvim",
       "williamboman/mason-lspconfig.nvim",
-      "hrsh7th/cmp-nvim-lsp"
+      "hrsh7th/cmp-nvim-lsp",
+      "folke/neodev.nvim"
     },
     config = function()
-      local lspconfig = require("lspconfig")
-      local capabilities = vim.lsp.protocol.make_client_capabilities()
+      local lsp = vim.lsp
 
-      vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action)
+      -- vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action)
 
-
-      -- Diagnostic signs
       local signs = {
         Error = "",
         Warn  = "",
@@ -22,39 +20,29 @@ return {
         Info  = "",
       }
 
-      -- local signs = {
-      --   Error = "⏺",
-      --   Warn  = "⏺",
-      --   Hint  = "⏺",
-      --   Info  = "⏺",
-      -- }
 
       for type, icon in pairs(signs) do
         local hl = "DiagnosticSign" .. type
         vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
       end
 
-      -- -- Diagnostic configuration
-      -- vim.diagnostic.config({
-      --   virtual_text = false,
-      --   signs = false,
-      --   underline = true,
-      --   update_in_insert = false,
-      --   severity_sort = true,
-      -- })
-
       -- TypeScript/JavaScript LSP
-      lspconfig.ts_ls.setup({
-        on_attach = function()
-        end,
-        capabilities = require("cmp_nvim_lsp").default_capabilities()
+      lsp.config("ts_ls", {
+        capabilities = require("cmp_nvim_lsp").default_capabilities(),
+        root_markers = { "tsconfig.json", }
+      })
+
+      lsp.config("deno_ls", {
+        capabilities = require("cmp_nvim_lsp").default_capabilities(),
+        root_markers = { "deno.json", }
       })
 
       -- TailwindCSS LSP
-      lspconfig.tailwindcss.setup {
+      lsp.config("tailwindcss", {
         cmd = { "tailwindcss-language-server", "--stdio" },
         filetypes = { "html", "css", "scss", "javascript", "javascriptreact", "typescript", "typescriptreact", "vue", "tsx", 'jsx' },
-        root_dir = lspconfig.util.root_pattern("tailwind.config.js", "package.json", "tailwind.config.ts", "tailwind.config.cjs", "tailwind.config.mts", ".git"),
+        root_markers = { "tailwind.config.js", "package.json", "tailwind.config.ts",
+          "tailwind.config.cjs", "tailwind.config.mts", ".git" },
         on_attach = function(client, bufnr)
           require('nvim-treesitter.configs').setup({
             highlight = { enable = true },
@@ -62,9 +50,9 @@ return {
         end,
         settings = {},
         capabilities = require("cmp_nvim_lsp").default_capabilities()
-      }
+      })
 
-      lspconfig.cssls.setup({
+      lsp.config("cssls", {
         capabilities = require("cmp_nvim_lsp").default_capabilities(),
         settings = {
           css = {
@@ -80,14 +68,14 @@ return {
       })
 
       -- Prisma LSP
-      lspconfig.prismals.setup({
+      lsp.config("prismals", {
         cmd = { "prisma-language-server", "--stdio" },
         filetypes = { "prisma" },
-        root_dir = lspconfig.util.root_pattern(".git", "package.json", "prisma"),
+        root_markers = { ".git", "package.json", "prisma" },
       })
 
 
-      lspconfig.emmet_language_server.setup({
+      lsp.config("emmet_language_server", {
         filetypes = {
           "astro",
           "css",
@@ -105,21 +93,22 @@ return {
       })
 
       -- Csharp
-      lspconfig.omnisharp.setup {
+      lsp.config("omnisharp", {
         cmd = { "omnisharp", "--languageserver", "--hostPID", tostring(vim.fn.getpid()) },
         capabilities = require("cmp_nvim_lsp").default_capabilities()
-      }
+      })
 
-      lspconfig.razor_ls.setup {
+      lsp.config("razor_ls", {
         capabilities = require("cmp_nvim_lsp").default_capabilities()
-      }
+      })
 
 
-      lspconfig.csharp_ls.setup {
+      lsp.config("sharp_ls", {
         capabilities = require("cmp_nvim_lsp").default_capabilities()
-      }
+      })
 
-      lspconfig.lua_ls.setup({
+      require("neodev").setup()
+      lsp.config("lua_ls", {
         capabilities = require("cmp_nvim_lsp").default_capabilities(),
         settings = {
           Lua = {
@@ -148,7 +137,7 @@ return {
     "williamboman/mason-lspconfig.nvim",
     config = function()
       require("mason-lspconfig").setup({
-        ensure_installed = { "ts_ls", "tailwindcss", "prismals", "emmet_language_server", "cssls", "lua_ls", "omnisharp" },
+        ensure_installed = { "ts_ls", "tailwindcss", "prismals", "emmet_language_server", "cssls", "lua_ls", "omnisharp", "deno_ls" },
       })
     end,
   },

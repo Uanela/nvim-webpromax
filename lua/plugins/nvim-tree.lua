@@ -21,7 +21,7 @@ return {
       sort_by = "case_sensitive",
       view = {
         width = 32,
-        side = "right"
+        side = "right",
       },
       filters = {
         dotfiles = false,
@@ -41,18 +41,19 @@ return {
         end
         api.config.mappings.default_on_attach(bufnr)
 
-        vim.keymap.set('n', '<C-j>', function()
-          local node = api.tree.get_node_under_cursor()
-          if node.type == "file" then
-            local last_win = vim.fn.winnr('#')
-            if last_win > 0 and vim.api.nvim_win_is_valid(last_win) then
-              vim.cmd(last_win .. "wincmd w")
-              vim.cmd("edit " .. node.absolute_path)
-            else
-              api.node.open.edit()
+        vim.keymap.set("n", "<C-j>", api.node.open.edit)
+
+        vim.api.nvim_create_autocmd({ "FocusGained" }, {
+          callback = function()
+            local buf = vim.api.nvim_get_current_buf()
+            local ft = vim.api.nvim_buf_get_option(buf, "filetype")
+
+            print(vim.inspect(buf))
+            if ft == "NvimTree_1" then
+              api.tree.resize({ width = { min = 32, max = 120 } })
             end
-          end
-        end, { buffer = bufnr })
+          end,
+        })
       end,
     })
   end,

@@ -32,7 +32,7 @@ return {
         root_markers = { "tsconfig.json", }
       })
 
-      lsp.config("deno_ls", {
+      lsp.config("denols", {
         capabilities = require("cmp_nvim_lsp").default_capabilities(),
         root_markers = { "deno.json", }
       })
@@ -137,7 +137,7 @@ return {
     "williamboman/mason-lspconfig.nvim",
     config = function()
       require("mason-lspconfig").setup({
-        ensure_installed = { "ts_ls", "tailwindcss", "prismals", "emmet_language_server", "cssls", "lua_ls", "omnisharp", "deno_ls" },
+        ensure_installed = { "ts_ls", "tailwindcss", "prismals", "emmet_language_server", "cssls", "lua_ls", "omnisharp", "denols" },
       })
     end,
   },

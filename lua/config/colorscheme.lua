@@ -4,16 +4,21 @@ local function apply_custom_colors()
     Normal = { fg = "#d1d1d1", bg = "none" },
     NormalNC = { fg = "#d1d1d1", bg = "none" },
 
+
+    -- Normal = { bg = "none" },
+    -- NormalNC = { bg = "none" },
+
     -- -- Line numbers
-    -- LineNr = { fg = "#7b8baa", bg = "NONE" },
-    -- LineNrNC = { fg = "#7b8baa", bg = "NONE" },
-    -- CursorLineNr = { fg = "#cfcfcf", bg = "NONE" },
+    LineNr = { fg = "#7b8baa", bg = "NONE" },
+    LineNrNC = { fg = "#7b8baa", bg = "NONE" },
+    CursorLineNr = { fg = "#cfcfcf", bg = "NONE" },
 
     -- -- Current line highlight
-    -- CursorLine = { bg = "#0e0e0e" },
+    CursorLine = { bg = "#0e0e0e" },
 
     -- -- Comments
-    -- Comment = { fg = "#5c6370", italic = true },
+    Comment = { fg = "#5c6370", italic = true },
+    -- Comment = { italic = true },
 
     -- -- Keywords
     -- Keyword = { fg = "#c678dd" },
@@ -61,24 +66,24 @@ local function apply_custom_colors()
     -- StatusLineNC = { bg = "#2c323c", fg = "#5c6370" },
 
     -- -- Vertical split
-    -- VertSplit = { fg = "#3e4451", bg = "NONE" },
+    VertSplit = { fg = "#3e4451", bg = "NONE" },
 
     -- -- Popup menu
-    -- Pmenu = { bg = "#2c323c", fg = "#abb2bf" },
-    -- PmenuSel = { bg = "#3e4451", fg = "#abb2bf" },
-    -- PmenuSbar = { bg = "#3e4451" },
-    -- PmenuThumb = { bg = "#5c6370" },
+    Pmenu = { bg = "#2c323c", fg = "#abb2bf" },
+    PmenuSel = { bg = "#3e4451", fg = "#abb2bf" },
+    PmenuSbar = { bg = "#3e4451" },
+    PmenuThumb = { bg = "#5c6370" },
 
     -- -- Git gutter colors
-    -- GitGutterAdd = { fg = "#98c379" },
-    -- GitGutterChange = { fg = "#e5c07b" },
-    -- GitGutterDelete = { fg = "#e06c75" },
+    GitGutterAdd = { fg = "#98c379" },
+    GitGutterChange = { fg = "#e5c07b" },
+    GitGutterDelete = { fg = "#e06c75" },
 
     -- -- Diagnostic colors
-    -- DiagnosticError = { fg = "#e06c75" },
-    -- DiagnosticWarn = { fg = "#e5c07b" },
-    -- DiagnosticInfo = { fg = "#61afef" },
-    -- DiagnosticHint = { fg = "#56b6c2" },
+    DiagnosticError = { fg = "#e06c75" },
+    DiagnosticWarn = { fg = "#e5c07b" },
+    DiagnosticInfo = { fg = "#61afef" },
+    DiagnosticHint = { fg = "#56b6c2" },
 
     -- -- CoC specific highlights
     CocErrorSign = { fg = "#e06c75" },
@@ -87,19 +92,19 @@ local function apply_custom_colors()
     CocHintSign = { fg = "#56b6c2" },
 
     -- -- Matching parentheses
-    -- MatchParen = { bg = "#3e4451", fg = "#61afef", bold = true },
+    MatchParen = { bg = "#3e4451", fg = "#61afef", bold = true },
 
     -- -- Folded text
     -- Folded = { bg = "#2c323c", fg = "#5c6370" },
 
     -- -- Tab line
-    -- TabLine = { bg = "#2c323c", fg = "#5c6370" },
-    -- TabLineFill = { bg = "#2c323c" },
-    -- TabLineSel = { bg = "#3e4451", fg = "#abb2bf" },
+    TabLine = { bg = "#2c323c", fg = "#5c6370" },
+    TabLineFill = { bg = "#2c323c" },
+    TabLineSel = { bg = "#3e4451", fg = "#abb2bf" },
 
     -- -- End of buffer
-    -- EndOfBuffer = { fg = "none", bg = "none" },
-    -- EndOfBufferNC = { fg = "none", bg = "none" },
+    EndOfBuffer = { fg = "none", bg = "none" },
+    EndOfBufferNC = { fg = "none", bg = "none" },
 
     -- Scrollview highlights
     ScrollViewDiagnosticError = { bg = "Red" },
@@ -109,7 +114,8 @@ local function apply_custom_colors()
 
     NvimTreeFolderIcon = { fg = "#8c9abd" },
     NvimTreeFolderName = { fg = "#dbe5ff" },
-    NvimTreeNormalNc = { bg = "none" }
+    NvimTreeNormalNc = { bg = "none" },
+    NvimTreeNormal = { bg = "none" }
   }
 
 
@@ -122,7 +128,7 @@ local function apply_custom_colors()
 end
 
 -- Set colorscheme
-vim.cmd.colorscheme("tokyonight")
+vim.cmd.colorscheme("monochrome")
 
 -- Apply custom colors
 apply_custom_colors()

@@ -1,14 +1,8 @@
 local function apply_custom_colors()
   local colors = {
-    -- Background and foreground
-    Normal = { fg = "#d1d1d1", bg = "none" },
-    NormalNC = { fg = "#d1d1d1", bg = "none" },
+    Normal = { bg = "none" },
+    NormalNC = { bg = "none" },
 
-
-    -- Normal = { bg = "none" },
-    -- NormalNC = { bg = "none" },
-
-    -- -- Line numbers
     LineNr = { fg = "#7b8baa", bg = "NONE" },
     LineNrNC = { fg = "#7b8baa", bg = "NONE" },
     CursorLineNr = { fg = "#cfcfcf", bg = "NONE" },
@@ -71,8 +65,12 @@ local function apply_custom_colors()
     -- -- Popup menu
     Pmenu = { bg = "#2c323c", fg = "#abb2bf" },
     PmenuSel = { bg = "#3e4451", fg = "#abb2bf" },
-    PmenuSbar = { bg = "#3e4451" },
-    PmenuThumb = { bg = "#5c6370" },
+    PmenuSbar = { bg = "#2b323e" }, -- Popup menu scrollbar
+    PmenuThumb = { bg = "none" },   -- Popup menu scrollbar thumb
+
+    -- Scrollbar column
+    -- SignColumn = { bg = "#2b323e" },
+    -- FoldColumn = { bg = "#2b323e" },
 
     -- -- Git gutter colors
     GitGutterAdd = { fg = "#98c379" },
@@ -94,17 +92,45 @@ local function apply_custom_colors()
     -- -- Matching parentheses
     MatchParen = { bg = "#3e4451", fg = "#61afef", bold = true },
 
-    -- -- Folded text
-    -- Folded = { bg = "#2c323c", fg = "#5c6370" },
 
     -- -- Tab line
-    TabLine = { bg = "#2c323c", fg = "#5c6370" },
-    TabLineFill = { bg = "#2c323c" },
-    TabLineSel = { bg = "#3e4451", fg = "#abb2bf" },
+    -- TabLine = { bg = "#2c323c", fg = "#5c6370" },
+    -- TabLineFill = { bg = "#2c323c" },
+    -- TabLineSel = { bg = "#3e4451", fg = "#abb2bf" },
+
+    TabLine = { bg = "none", fg = "#5c6370", ctermbg = "none" },
+    TabLineFill = { bg = "none", ctermbg = "none" },
+    TabLineSel = { bg = "none", fg = "#abb2bf", ctermbg = "none" },
+
+    -- Barbar buffer line
+    BufferCurrent = { fg = "#abb2bf", bg = "#272c35" },
+    BufferCurrentSign = { fg = "#4b5263", bg = "#2b323e" },
+    BufferCurrentMod = { fg = "#e5c07b", bg = "#272c35" },
+    BufferCurrentIcon = { bg = "none" },
+    BufferVisible = { fg = "#5c6370", bg = "#2b323e" },
+    BufferVisibleSign = { fg = "#4b5263", bg = "#2b323e" },
+    BufferVisibleMod = { fg = "#e5c07b", bg = "#2b323e" },
+    BufferVisibleIcon = { bg = "none" },
+    BufferInactive = { fg = "#5c6370", bg = "#2b323e" },
+    BufferInactiveSign = { fg = "#4b5263", bg = "#2b323e" },
+    BufferInactiveMod = { fg = "#e5c07b", bg = "#2b323e" },
+    BufferInactiveIcon = { bg = "#2b323e" },
+    BufferTabpageFill = { bg = "#2b323e" },
+    BufferTabpages = { fg = "#abb2bf", bg = "#2b323e" },
 
     -- -- End of buffer
-    EndOfBuffer = { fg = "none", bg = "none" },
-    EndOfBufferNC = { fg = "none", bg = "none" },
+    -- EndOfBuffer = { fg = "none", bg = "none" },
+    -- EndOfBufferNC = { fg = "none", bg = "none" },
+
+    -- Barbecue (winbar/breadcrumb)
+    barbecue_normal = { fg = "#abb2bf", bg = "#2b323e" },
+    barbecue_ellipsis = { fg = "#5c6370", bg = "#2b323e" },
+    barbecue_separator = { fg = "#5c6370", bg = "#2b323e" },
+    barbecue_modified = { fg = "#e5c07b", bg = "#2b323e" },
+    barbecue_dirname = { fg = "#5c6370", bg = "#2b323e" },
+    barbecue_basename = { fg = "#abb2bf", bg = "#2b323e" },
+    barbecue_context = { fg = "#abb2bf", bg = "#2b323e" },
+
 
     -- Scrollview highlights
     ScrollViewDiagnosticError = { bg = "Red" },
@@ -112,19 +138,28 @@ local function apply_custom_colors()
     ScrollViewDiagnosticInfo = { bg = "Blue" },
     ScrollViewDiagnosticHint = { bg = "Blue" },
 
-    NvimTreeFolderIcon = { fg = "#8c9abd" },
-    NvimTreeFolderName = { fg = "#dbe5ff" },
+    NvimTreeFolderIcon = { fg = "#6a7e90" },
+    NvimTreeFolderName = { fg = "#d6dfe6" },
     NvimTreeNormalNc = { bg = "none" },
-    NvimTreeNormal = { bg = "none" }
+    NvimTreeNormal = { bg = "none" },
+    NvimTreeCursorLine = { bg = "#2b323e" },   -- Selected item background
+    NvimTreeCursorLineNr = { bg = "#2b323e" }, -- Line number for selected item
+
+    WinSeparator = { fg = "#2b323e", bg = "#2b323e" },
+
+    -- nvim-scrollbar specific
+    ScrollView = { bg = "#5c6370" },
+
+    -- Scrollbar on the right
   }
 
 
-  -- vim.api.nvim_set_hl(0, "NvimTreeFolderIcon", { fg = "#5d6b8f" })
-  -- vim.api.nvim_set_hl(0, "NvimTreeFolderName", { fg = "#d1d1d1" })
 
   for group, opts in pairs(colors) do
     vim.api.nvim_set_hl(0, group, opts)
   end
+
+  -- })
 end
 
 -- Set colorscheme
@@ -132,6 +167,7 @@ vim.cmd.colorscheme("monochrome")
 
 -- Apply custom colors
 apply_custom_colors()
+vim.opt.termguicolors = true
 
 -- Auto-apply colors after colorscheme changes
 vim.api.nvim_create_autocmd("ColorScheme", {

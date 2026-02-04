@@ -15,12 +15,6 @@ return {
     end
   },
 
-  -- -- File Navigation
-  {
-    "romgrk/barbar.nvim",
-    dependencies = { "nvim-tree/nvim-web-devicons" },
-  },
-
   -- Fuzzy Finder
   {
     "nvim-telescope/telescope.nvim",
@@ -33,23 +27,6 @@ return {
 
   -- Git
   { "airblade/vim-gitgutter" },
-
-  -- LSP & Completion
-  -- {
-  --   "neoclide/coc.nvim",
-  --   branch = "release",
-  --   config = function()
-  --     require("plugins.coc")
-  --   end
-  -- },
-
-  -- Alternative LSP setup (choose one)
-  {
-    "neovim/nvim-lspconfig",
-    config = function()
-      require("plugins.lsp")
-    end
-  },
 
   -- Treesitter
   {
@@ -97,18 +74,14 @@ return {
   },
 
   -- Misc
-  { "editorconfig/editorconfig-vim" },
+  -- { "editorconfig/editorconfig-vim" },
   { "jiangmiao/auto-pairs" },
 
   -- Themes
-  { "dracula/vim",                  name = "dracula" },
+  { "dracula/vim",              name = "dracula" },
   { "olimorris/onedarkpro.nvim" },
-  {
-    "folke/tokyonight.nvim",
-    lazy = false,
-    priority = 1000,
-    opts = {},
-  },
+  { "folke/tokyonight.nvim" },
+  { "fxn/vim-monochrome" },
 
   -- Prettier
   {
@@ -118,10 +91,10 @@ return {
   },
 
   -- Snippets
-  { "SirVer/ultisnips" },
+  -- { "SirVer/ultisnips" },
 
   -- TailwindCSS
-  { "hrsh7th/nvim-cmp" },
+  -- { "hrsh7th/nvim-cmp" },
   {
     "roobert/tailwindcss-colorizer-cmp.nvim",
     config = function()
@@ -131,16 +104,7 @@ return {
     end
   },
 
-  -- Image support
-  { "3rd/image.nvim" },
 
-  -- Firenvim
-  {
-    "glacambre/firenvim",
-    build = function()
-      vim.fn["firenvim#install"](0)
-    end
-  },
 
   -- Multi-cursor
   { "mg979/vim-visual-multi", branch = "master" },
@@ -154,8 +118,8 @@ return {
   },
 
   -- Material icons
-  { "DaikyXendo/nvim-material-icon" },
+  -- { "DaikyXendo/nvim-material-icon" },
 
   -- Prisma
-  { "prisma/vim-prisma",            ft = "prisma" },
+  -- { "prisma/vim-prisma", ft = "prisma" },
 }

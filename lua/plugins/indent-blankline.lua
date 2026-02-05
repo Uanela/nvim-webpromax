@@ -38,9 +38,9 @@ return {
   config = function(_, opts)
     -- Set up custom blue highlight for indent lines
     vim.api.nvim_set_hl(0, "IblIndent", { fg = "#2a2a2a" }) -- Blue color
-    
+
     require("ibl").setup(opts)
-    
+
     -- Optional: Set different color specifically for TSX/JSX files
     vim.api.nvim_create_autocmd("FileType", {
       pattern = { "typescriptreact", "javascriptreact" },

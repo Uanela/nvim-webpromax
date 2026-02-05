@@ -6,7 +6,7 @@ return {
       backend = "kitty",
       integrations = {
         markdown = {
-          enabled = true,
+          enabled = false,
           clear_in_insert_mode = false,
         },
       },

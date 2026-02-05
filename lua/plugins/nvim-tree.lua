@@ -3,7 +3,7 @@ return {
   commit = "543ed3c",
   dependencies = { "DaikyXendo/nvim-material-icon" },
   keys = {
-    { "<leader>e", function() require('nvim-tree.api').tree.focus() end, desc = "Focus file explorer" },
+    { "<leader>b", function() require('nvim-tree.api').tree.focus() end, desc = "Focus file explorer" },
     { "<C-b>",     "<cmd>NvimTreeToggle<cr>",                            desc = "Toggle file explorer" },
   },
   config = function()
@@ -11,6 +11,10 @@ return {
     require("nvim-tree").setup({
       hijack_directories = {
         enable = true
+      },
+      system_open = {
+        cmd = "open",
+        args = { "-R" }
       },
       renderer = {
         icons = {
@@ -34,6 +38,11 @@ return {
       },
       on_attach = function(bufnr)
         local api = require("nvim-tree.api")
+
+        -- vim.keymap.set("n", "R", api.node.system_open, {
+        --   buffer = bufnr,
+        --   silent = true,
+        -- })
 
         if not tree_opened then
           tree_opened = true
@@ -182,6 +191,7 @@ return {
 
     opts.on_attach = function(bufnr)
       api.config.mappings.default_on_attach(bufnr)
+
 
       vim.keymap.set("n", "r", function()
         local node = api.tree.get_node_under_cursor()

@@ -39,10 +39,6 @@ keymap("i", "<C-l>", "<C-o>D", opts)
 keymap("i", "<C-i>", "<C-o>d0", opts)
 keymap("i", "<C-j>", "<C-o>o", opts)
 
--- File tree
-keymap("n", "<C-b>", ":NvimTreeToggle<CR>", opts)
-keymap("n", "<leader>b", ":NvimTreeFocus<CR>", opts)
-
 -- Buffer navigation
 keymap("n", "<leader>]", ":BufferNext<CR>", opts)
 keymap("n", "<leader>[", ":BufferPrevious<CR>", opts)
@@ -55,6 +51,7 @@ keymap("n", "<C-F>", ":Telescope live_grep<CR>", opts)
 -- Git
 keymap("n", "<leader>gs", ":Git<CR>", opts)
 keymap("n", "<leader>ga", ":Git add .<CR>", opts)
+keymap("n", "<leader>gb", ":Git branch<CR>", opts)
 keymap("n", "<leader>gc", ":Git commit<CR>", opts)
 keymap("n", "<leader>gp", ":Git push<CR>", opts)
 

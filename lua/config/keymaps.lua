@@ -48,13 +48,6 @@ keymap("n", "<leader>x", ":BufferClose<CR>", opts)
 keymap("n", "<C-p>", ":Telescope find_files<CR>", opts)
 keymap("n", "<C-F>", ":Telescope live_grep<CR>", opts)
 
--- Git
-keymap("n", "<leader>gs", ":Git<CR>", opts)
-keymap("n", "<leader>ga", ":Git add .<CR>", opts)
-keymap("n", "<leader>gb", ":Git branch<CR>", opts)
-keymap("n", "<leader>gc", ":Git commit<CR>", opts)
-keymap("n", "<leader>gp", ":Git push<CR>", opts)
-
 -- Commentary
 keymap("v", "<leader>/", ":Commentary<CR>", opts)
 keymap("i", "<C-/>", ":Commentary<CR>", opts)

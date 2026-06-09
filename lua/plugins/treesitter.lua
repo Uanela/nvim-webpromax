@@ -1,69 +1,55 @@
 return {
   "nvim-treesitter/nvim-treesitter",
   build = ":TSUpdate",
-  event = { "BufReadPre", "BufNewFile" },
+  branch = "main",
+  lazy = false,
   dependencies = {
-    "nvim-treesitter/nvim-treesitter-textobjects",
+    { "nvim-treesitter/nvim-treesitter-textobjects", branch = "main" },
   },
   config = function()
-    require('nvim-treesitter.configs').setup {
-      ensure_installed = {
-        "tsx", "javascript", "typescript", "json", "html", "css",
-        "lua", "python", "rust", "go", "prisma", "c_sharp"
-      },
-      highlight = {
-        enable = true,
-        additional_vim_regex_highlighting = false,
-      },
-      indent = {
-        enable = true
-      },
-      incremental_selection = {
-        enable = true,
-        keymaps = {
-          init_selection = "<C-space>",
-          node_incremental = "<C-space>",
-          scope_incremental = false,
-          node_decremental = "<bs>",
-        },
-      },
-      textobjects = {
-        select = {
-          enable = true,
-          lookahead = true,
-          keymaps = {
-            ["af"] = "@function.outer",
-            ["if"] = "@function.inner",
+    local ts = require('nvim-treesitter')
 
-            ["al"] = "@call.outer",
-            ["il"] = "@call.inner",
+    ts.install({
+      "tsx", "javascript", "typescript", "json", "html", "css",
+      "lua", "python", "rust", "go", "prisma", "c_sharp"
+    })
 
-            ["ac"] = "@class.outer",
-            ["ic"] = "@class.inner",
+    vim.api.nvim_create_autocmd('FileType', {
+      callback = function()
+        pcall(vim.treesitter.start)
+        vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+      end,
+    })
 
-            ["ap"] = "@parameter.outer",
-            ["ip"] = "@parameter.inner",
-
-            -- ["aa"] = "@argument.outer",
-            -- ["ia"] = "@argument.inner",
-
-            ["aa"] = "@loop.outer",
-            ["ia"] = "@loop.inner",
-
-            ["aC"] = "@conditional.outer",
-            ["iC"] = "@conditional.inner",
-
-            ["ab"] = "@block.outer",
-            ["ib"] = "@block.inner",
-
-            ["as"] = "@statement.outer",
-            ["is"] = "@statement.inner",
-
-            ["am"] = "@comment.outer",
-            ["im"] = "@comment.inner",
-          },
-        },
-      },
+    require("nvim-treesitter-textobjects").setup {
+      select = { lookahead = true },
+      move   = { set_jumps = true },
     }
+
+    -- Select textobjects (x = visual, o = operator-pending)
+    local select = require("nvim-treesitter-textobjects.select")
+    local function sel(key, query)
+      vim.keymap.set({ "x", "o" }, key, function()
+        select.select_textobject(query, "textobjects")
+      end)
+    end
+
+    sel("af", "@function.outer")
+    sel("if", "@function.inner")
+    sel("al", "@call.outer")
+    sel("il", "@call.inner")
+    sel("ac", "@class.outer")
+    sel("ic", "@class.inner")
+    sel("ap", "@parameter.outer")
+    sel("ip", "@parameter.inner")
+    sel("aa", "@loop.outer")
+    sel("ia", "@loop.inner")
+    sel("aC", "@conditional.outer")
+    sel("iC", "@conditional.inner")
+    sel("ab", "@block.outer")
+    sel("ib", "@block.inner")
+    sel("as", "@statement.outer")
+    sel("am", "@comment.outer")
+    sel("im", "@comment.inner")
   end,
 }

@@ -3,8 +3,8 @@ local keymap = vim.keymap.set
 local map = vim.api.nvim_set_keymap
 
 -- Search
-keymap("n", "<CR>", ":nohlsearch<CR>", opts)
-keymap("n", "<Esc>", ":nohlsearch<CR>", opts)
+vim.keymap.set("n", "<Esc>", "<Esc><cmd>nohlsearch<CR>", { noremap = true, silent = true })
+vim.keymap.set("n", "<CR>", "<cmd>nohlsearch<CR>", { noremap = true, silent = true })
 
 -- Yank and Paste to system clipboard
 keymap("v", "<leader>y", '"+y', opts)
@@ -20,8 +20,8 @@ keymap("i", "<C-v>", '<C-o>:put .<CR>', opts)
 -- File operations
 keymap("n", "<C-s>", ":w<CR>", opts)
 keymap("i", "<C-s>", "<Esc>:w<CR>", opts)
-keymap("n", "<C-q>", ":wq<CR>", opts)
-keymap("i", "<C-q>", "<Esc>:wq<CR>", opts)
+keymap("n", "<C-q>", ":q<CR>", opts)
+keymap("i", "<C-q>", "<Esc>:q<CR>", opts)
 
 -- Window navigation
 keymap("n", "<C-1>", "1<C-w>w", opts)
@@ -53,8 +53,9 @@ keymap("v", "<leader>/", ":Commentary<CR>", opts)
 keymap("i", "<C-/>", ":Commentary<CR>", opts)
 
 -- Diagnostics
-keymap("n", "d[", vim.diagnostic.goto_prev, { desc = "Go to previous diagnostic" })
-keymap("n", "d]", vim.diagnostic.goto_next, { desc = "Go to next diagnostic" })
+keymap("n", "d[", function() vim.diagnostic.jump({ count = -1, float = true }) end,
+  { desc = "Go to previous diagnostic" })
+keymap("n", "d]", function() vim.diagnostic.jump({ count = 1, float = true }) end, { desc = "Go to next diagnostic" })
 keymap("n", "<leader>e", vim.diagnostic.open_float, { desc = "Show diagnostics" })
 keymap("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Diagnostics to Loclist" })
 
@@ -97,6 +98,7 @@ map('v', 'x', '"_x', opts)
 vim.keymap.set({ 'n', 'v' }, '<leader>d', 'd', { noremap = true })
 vim.keymap.set({ 'n', 'v' }, '<leader>c', 'c', { noremap = true })
 vim.keymap.set({ 'n', 'v' }, '<leader>x', 'x', { noremap = true })
+vim.keymap.set('v', 'p', '"_dP')
 
 -- Add to any lua config file
 vim.keymap.set("n", "<leader>tt", function()

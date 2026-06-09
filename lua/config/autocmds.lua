@@ -27,7 +27,7 @@ autocmd("BufWritePre", {
 -- Prettier auto-format (with safety check)
 autocmd("BufWritePre", {
   group = "AutoFormat",
-  pattern = { "*.tsx", "*.ts", "*.js", "*.jsx", "*.json", "*.css", "*.md", "*.prisma", "*.lua", "*.py", "*.go", "*.rs", "*.java", "*.cpp", "*.h", "*.cc", "*.cxx", "*.hpp" },
+  pattern = { "*.tsx", "*.ts", "*.js", "*.jsx", "*.json", "*.css", "*.md", "*.prisma", "*.lua", "*.py", "*.go", "*.rs", "*.java", "*.cpp", "*.h", "*.cc", "*.cxx", "*.hpp", "*.html", "*.mdx", "*.c" },
   callback = function(ev)
     local filetype = vim.bo[ev.buf].filetype
     local function format_with_lsp()
@@ -62,9 +62,9 @@ autocmd({ "BufRead", "BufNewFile" }, {
 augroup("CommentString", { clear = true })
 autocmd("FileType", {
   group = "CommentString",
-  pattern = { "javascript", "typescript", "javascriptreact", "typescriptreact" },
+  pattern = { "javascriptreact", "typescriptreact", "tsx", "jsx" },
   callback = function()
-    vim.bo.commentstring = "// %s"
+    vim.bo.commentstring = "{/* %s */}"
   end,
 })
 
@@ -99,9 +99,8 @@ vim.api.nvim_create_autocmd("FileType", {
 
 vim.api.nvim_create_user_command("Refresh",
   function()
-    vim.cmd('LspRestart')
+    vim.cmd('lsp restart')
     vim.cmd('NvimTreeRefresh')
-    -- vim.cmd('CocRestart')
   end,
   { desc = "Runs LspRestart and NvimTreeRefresh for a complete IDE referesh." })
 
@@ -128,3 +127,14 @@ vim.api.nvim_create_autocmd("BufEnter", {
     end
   end,
 })
+
+-- To prevent Oil from polluting nvim-tree
+-- vim.api.nvim_create_autocmd("BufEnter", {
+--   callback = function()
+--     local name = vim.api.nvim_buf_get_name(0)
+--     if name:match("^oil:") then
+--       return
+--     end
+--     vim.cmd("silent! lcd %:p:h")
+--   end,
+-- })

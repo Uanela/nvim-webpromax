@@ -12,8 +12,6 @@ return {
       local lsp = vim.lsp
       local default_capabilities = require("cmp_nvim_lsp").default_capabilities()
 
-      -- vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action)
-
       local signs = {
         Error = "",
         Warn  = "",
@@ -44,11 +42,6 @@ return {
         filetypes = { "html", "css", "scss", "javascript", "javascriptreact", "typescript", "typescriptreact", "vue", "tsx", 'jsx' },
         root_markers = { "tailwind.config.js", "package.json", "tailwind.config.ts",
           "tailwind.config.cjs", "tailwind.config.mts", ".git" },
-        on_attach = function()
-          require('nvim-treesitter.configs').setup({
-            highlight = { enable = true },
-          })
-        end,
         settings = {},
         capabilities = default_capabilities
       })
@@ -112,13 +105,17 @@ return {
         capabilities = default_capabilities
       })
 
+      lsp.config("html", {
+        capabilities = default_capabilities
+      })
+
       lsp.config("clangd", {
         cmd = {
           "clangd",
           "--compile-commands-dir=build", -- Example: specify where compile_commands.json is located
           "--fallback-style=llvm",
         },
-        filetypes = {"c", "cpp", "cc", "c++", "tpp"},
+        filetypes = { "c", "cpp", "cc", "c++", "tpp" },
         capabilities = default_capabilities
       })
 
@@ -152,7 +149,7 @@ return {
     "williamboman/mason-lspconfig.nvim",
     config = function()
       require("mason-lspconfig").setup({
-        ensure_installed = { "ts_ls", "tailwindcss", "prismals", "emmet_language_server", "cssls", "lua_ls", "omnisharp", "denols", "pyright", "clangd" },
+        ensure_installed = { "ts_ls", "tailwindcss", "prismals", "emmet_language_server", "cssls", "lua_ls", "omnisharp", "denols", "pyright", "clangd", "html" },
       })
     end,
   },

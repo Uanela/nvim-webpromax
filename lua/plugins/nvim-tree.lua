@@ -16,11 +16,19 @@ return {
         cmd = "open",
         args = { "-R" }
       },
+      diagnostics = {
+        enable = true
+      },
+      git = {
+        enable = true
+      },
       renderer = {
         icons = {
           webdev_colors = true,
         },
         group_empty = true,
+        highlight_diagnostics = "name",
+        highlight_git = "name"
       },
       sort_by = "case_sensitive",
       view = {
@@ -34,15 +42,10 @@ return {
         enable = true,
         update_cwd = false,
         update_root = false,
-        ignore_list = {},
+        ignore_list = { ".git", "oil:" },
       },
       on_attach = function(bufnr)
         local api = require("nvim-tree.api")
-
-        -- vim.keymap.set("n", "R", api.node.system_open, {
-        --   buffer = bufnr,
-        --   silent = true,
-        -- })
 
         if not tree_opened then
           tree_opened = true
@@ -110,7 +113,7 @@ return {
 
         -- Collect active LSP clients that support rename operations
         local lsp_clients = {}
-        for _, client in pairs(vim.lsp.get_active_clients()) do
+        for _, client in pairs(vim.lsp.get_clients()) do
           if client.supports_method("workspace/willRenameFiles") then
             table.insert(lsp_clients, client)
           end

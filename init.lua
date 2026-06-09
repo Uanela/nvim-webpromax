@@ -35,6 +35,6 @@ vim.api.nvim_create_user_command("Restart", function()
   vim.cmd("qall")
 end, {})
 
-
+vim.lsp.document_color.enable(false)
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1

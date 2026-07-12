@@ -1,7 +1,6 @@
 local autocmd = vim.api.nvim_create_autocmd
 local augroup = vim.api.nvim_create_augroup
 
-
 -- Auto-create missing directories on save
 augroup("AutoMkdir", { clear = true })
 autocmd("BufWritePre", {
@@ -68,6 +67,13 @@ autocmd("FileType", {
   end,
 })
 
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "css",
+  callback = function()
+    vim.bo.commentstring = "/* %s */"
+  end,
+})
+
 -- Diagnostics refresh for scrollview (with safety check)
 augroup("DiagnosticRefresh", { clear = true })
 autocmd({ "BufEnter", "CursorMoved", "DiagnosticChanged" }, {
@@ -93,7 +99,7 @@ vim.api.nvim_create_autocmd("FileType", {
   pattern = "NvimTree",
   once = true,
   callback = function()
-    require("nvim-tree.api").tree.change_root_to_node()
+    -- require("nvim-tree.api").tree.change_root_to_node()
   end,
 })
 
@@ -104,37 +110,26 @@ vim.api.nvim_create_user_command("Refresh",
   end,
   { desc = "Runs LspRestart and NvimTreeRefresh for a complete IDE referesh." })
 
-vim.api.nvim_create_autocmd("BufEnter", {
-  callback = function()
-    local current = vim.api.nvim_get_current_buf()
-
-    local bufs = vim.tbl_filter(function(b)
-      return vim.api.nvim_buf_is_valid(b)
-          and vim.bo[b].buflisted
-          and vim.bo[b].buftype ~= "terminal"
-          and b ~= current
-    end, vim.api.nvim_list_bufs())
-
-    if #bufs > 10 then
-      table.sort(bufs, function(a, b)
-        local a_used = (vim.fn.getbufinfo(a)[1] or {}).lastused or 0
-        local b_used = (vim.fn.getbufinfo(b)[1] or {}).lastused or 0
-        return a_used < b_used
-      end)
-      for i = 1, #bufs - 10 do
-        vim.api.nvim_buf_delete(bufs[i], { force = false })
-      end
-    end
-  end,
-})
-
--- To prevent Oil from polluting nvim-tree
 -- vim.api.nvim_create_autocmd("BufEnter", {
 --   callback = function()
---     local name = vim.api.nvim_buf_get_name(0)
---     if name:match("^oil:") then
---       return
+--     local current = vim.api.nvim_get_current_buf()
+--
+--     local bufs = vim.tbl_filter(function(b)
+--       return vim.api.nvim_buf_is_valid(b)
+--           and vim.bo[b].buflisted
+--           and vim.bo[b].buftype ~= "terminal"
+--           and b ~= current
+--     end, vim.api.nvim_list_bufs())
+--
+--     if #bufs > 10 then
+--       table.sort(bufs, function(a, b)
+--         local a_used = (vim.fn.getbufinfo(a)[1] or {}).lastused or 0
+--         local b_used = (vim.fn.getbufinfo(b)[1] or {}).lastused or 0
+--         return a_used < b_used
+--       end)
+--       for i = 1, #bufs - 10 do
+--         vim.api.nvim_buf_delete(bufs[i], { force = false })
+--       end
 --     end
---     vim.cmd("silent! lcd %:p:h")
 --   end,
 -- })

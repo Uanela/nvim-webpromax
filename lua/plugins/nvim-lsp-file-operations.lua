@@ -1,7 +1,11 @@
 return {
-  "antosha417/nvim-lsp-file-operations",
-  dependencies = { "nvim-lua/plenary.nvim" },
-  config = function()
-    require("lsp-file-operations").setup()
-  end,
+  {
+    "Crysthamus/nvim-file-operations",
+    dependencies = {
+      "nvim-tree/nvim-tree.lua",
+    },
+    config = function()
+      require("nvim-file-operations").setup()
+    end,
+  },
 }

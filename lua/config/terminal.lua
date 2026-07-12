@@ -1,14 +1,19 @@
 local M = {}
 
+vim.api.nvim_create_autocmd("TermOpen", {
+  callback = function()
+    vim.opt_local.number = true
+    vim.opt_local.relativenumber = true
+  end
+})
+
 function M.toggle(terminal_id)
   local tab_id = vim.api.nvim_get_current_tabpage()
   terminal_id = (terminal_id or "default") .. tab_id
 
-  -- Look for terminal with specific ID
   for buf = 1, vim.fn.bufnr('$') do
     if vim.fn.getbufvar(buf, '&buftype') == 'terminal' and
         vim.fn.getbufvar(buf, 'terminal_id') == terminal_id then
-      -- Check if visible and toggle accordingly
       for win = 1, vim.fn.winnr('$') do
         if vim.fn.winbufnr(win) == buf then
           vim.cmd(win .. 'wincmd c')
@@ -20,7 +25,6 @@ function M.toggle(terminal_id)
     end
   end
 
-  -- Create new terminal with ID
   vim.cmd('split | terminal')
   vim.fn.setbufvar(vim.fn.bufnr('%'), 'terminal_id', terminal_id)
 end

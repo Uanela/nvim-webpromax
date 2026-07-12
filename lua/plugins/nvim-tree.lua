@@ -1,25 +1,18 @@
 return {
   "nvim-tree/nvim-tree.lua",
-  commit = "543ed3c",
+  dir = "~/Documents/development/lua/nvim-tree.lua",
+  branch = "feat/add-download-from-path",
   dependencies = { "DaikyXendo/nvim-material-icon" },
   keys = {
     { "<leader>b", function() require('nvim-tree.api').tree.focus() end, desc = "Focus file explorer" },
     { "<C-b>",     "<cmd>NvimTreeToggle<cr>",                            desc = "Toggle file explorer" },
   },
   config = function()
-    local tree_opened = false
     require("nvim-tree").setup({
       hijack_directories = {
         enable = true
       },
-      system_open = {
-        cmd = "open",
-        args = { "-R" }
-      },
       diagnostics = {
-        enable = true
-      },
-      git = {
         enable = true
       },
       renderer = {
@@ -28,7 +21,6 @@ return {
         },
         group_empty = true,
         highlight_diagnostics = "name",
-        highlight_git = "name"
       },
       sort_by = "case_sensitive",
       view = {
@@ -41,16 +33,12 @@ return {
       update_focused_file = {
         enable = true,
         update_cwd = false,
-        update_root = false,
+        update_root = true,
         ignore_list = { ".git", "oil:" },
       },
       on_attach = function(bufnr)
         local api = require("nvim-tree.api")
 
-        if not tree_opened then
-          tree_opened = true
-          api.tree.change_root_to_node()
-        end
         api.config.mappings.default_on_attach(bufnr)
 
         vim.keymap.set("n", "<C-j>", api.node.open.edit)
@@ -60,7 +48,6 @@ return {
             local buf = vim.api.nvim_get_current_buf()
             local ft = vim.api.nvim_buf_get_option(buf, "filetype")
 
-            print(vim.inspect(buf))
             if ft == "NvimTree_1" then
               api.tree.resize({ width = { min = 32, max = 120 } })
             end
@@ -69,139 +56,4 @@ return {
       end,
     })
   end,
-  opts = function(_, opts)
-    local api = require("nvim-tree.api")
-
-    local function rename_with_lsp(node)
-      local old_path = node.absolute_path
-      local old_name = node.name
-      local parent_dir = vim.fn.fnamemodify(old_path, ":h")
-
-      -- Allow both renaming and moving by accepting full paths
-      local prompt_text = "Rename/Move to (use full path for moving): "
-      local default_value = old_name
-
-      vim.ui.input({ prompt = prompt_text, default = default_value }, function(input)
-        if not input or input == "" or input == old_name then
-          return
-        end
-
-        local new_path
-        -- Check if input contains path separators (moving to different directory)
-        if input:match("[/\\]") then
-          -- Full path provided
-          if not vim.startswith(input, "/") then
-            -- Relative path, make it absolute from current parent
-            new_path = parent_dir .. "/" .. input
-          else
-            -- Already absolute path
-            new_path = input
-          end
-        else
-          -- Just a filename, rename in same directory
-          new_path = parent_dir .. "/" .. input
-        end
-
-        -- Normalize path
-        new_path = vim.fn.resolve(new_path)
-
-        -- Create target directory if it doesn't exist
-        local target_dir = vim.fn.fnamemodify(new_path, ":h")
-        if vim.fn.isdirectory(target_dir) == 0 then
-          vim.fn.mkdir(target_dir, "p")
-        end
-
-        -- Collect active LSP clients that support rename operations
-        local lsp_clients = {}
-        for _, client in pairs(vim.lsp.get_clients()) do
-          if client.supports_method("workspace/willRenameFiles") then
-            table.insert(lsp_clients, client)
-          end
-        end
-
-        -- If we have LSP clients, use LSP-assisted rename
-        if #lsp_clients > 0 then
-          local params = {
-            files = { {
-              oldUri = vim.uri_from_fname(old_path),
-              newUri = vim.uri_from_fname(new_path),
-            } }
-          }
-
-          -- Counter to track completed requests
-          local completed = 0
-          local total = #lsp_clients
-          local all_edits = {}
-
-          local function apply_edits_and_rename()
-            -- Apply all collected workspace edits
-            for _, edit_data in ipairs(all_edits) do
-              vim.lsp.util.apply_workspace_edit(edit_data.edit, edit_data.encoding)
-            end
-
-            -- Perform the actual file rename/move
-            local success, err = pcall(vim.loop.fs_rename, old_path, new_path)
-            if not success then
-              vim.notify("Failed to rename/move file: " .. tostring(err), vim.log.levels.ERROR)
-              return
-            end
-
-            -- Refresh nvim-tree
-            api.tree.reload()
-
-            -- Open the moved file if it was currently open
-            local bufnr = vim.fn.bufnr(old_path)
-            if bufnr ~= -1 then
-              vim.api.nvim_buf_set_name(bufnr, new_path)
-            end
-
-            vim.notify("File renamed/moved successfully")
-          end
-
-          -- Send willRenameFiles request to all supporting clients
-          for _, client in ipairs(lsp_clients) do
-            client.request("workspace/willRenameFiles", params, function(err, result)
-              if err then
-                vim.notify("LSP rename request failed: " .. tostring(err), vim.log.levels.WARN)
-              else
-                if result and (result.documentChanges or result.changes) then
-                  table.insert(all_edits, {
-                    edit = result,
-                    encoding = client.offset_encoding
-                  })
-                end
-              end
-
-              completed = completed + 1
-              if completed == total then
-                apply_edits_and_rename()
-              end
-            end)
-          end
-        else
-          -- No LSP support, just do the file operation
-          local success, err = pcall(vim.loop.fs_rename, old_path, new_path)
-          if not success then
-            vim.notify("Failed to rename/move file: " .. tostring(err), vim.log.levels.ERROR)
-            return
-          end
-
-          api.tree.reload()
-          vim.notify("File renamed/moved successfully (no LSP support)")
-        end
-      end)
-    end
-
-    opts.on_attach = function(bufnr)
-      api.config.mappings.default_on_attach(bufnr)
-
-
-      vim.keymap.set("n", "r", function()
-        local node = api.tree.get_node_under_cursor()
-        if node and node.absolute_path and node.type == "file" then
-          rename_with_lsp(node)
-        end
-      end, { buffer = bufnr, desc = "Rename/Move file (with LSP imports update)" })
-    end
-  end
 }

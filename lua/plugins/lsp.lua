@@ -6,135 +6,144 @@ return {
       "williamboman/mason.nvim",
       "williamboman/mason-lspconfig.nvim",
       "hrsh7th/cmp-nvim-lsp",
-      "folke/neodev.nvim"
+      "folke/neodev.nvim",
     },
     config = function()
       local lsp = vim.lsp
       local default_capabilities = require("cmp_nvim_lsp").default_capabilities()
 
       local signs = {
-        Error = "",
-        Warn  = "",
-        Hint  = "",
-        Info  = "",
+        Error = "",
+        Warn  = "",
+        Hint  = "",
+        Info  = "",
       }
-
 
       for type, icon in pairs(signs) do
         local hl = "DiagnosticSign" .. type
         vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
       end
 
-      -- TypeScript/JavaScript LSP
+      local vue_typescript_plugin = vim.fn.stdpath("data")
+          .. "/mason/packages/vue-language-server/node_modules/@vue/language-server/node_modules/@vue/typescript-plugin"
+
       lsp.config("ts_ls", {
         capabilities = default_capabilities,
-        root_markers = { "tsconfig.json", }
+        root_markers = { "pnpm-workspace.yaml", "turbo.json", "nx.json", ".git", "package.json", "tsconfig.json" },
+        filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact", "vue" }, -- add "vue"
+        init_options = {
+          plugins = {
+            {
+              name = "@vue/typescript-plugin",
+              location = vue_typescript_plugin,
+              languages = { "vue" },
+            },
+          },
+          preferences = {
+            jsxAttributeCompletionStyle = "braces",
+            quotePreference = "double",
+          },
+        },
+        settings = {
+          typescript = {
+            format = {
+              enable = true,
+              insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces = true,
+              semicolons = "insert",
+            },
+          },
+          javascript = {
+            format = {
+              enable = true,
+              insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces = true,
+              semicolons = "insert",
+            },
+          },
+        },
       })
+      lsp.enable("ts_ls")
 
       lsp.config("denols", {
         capabilities = default_capabilities,
-        root_markers = { "deno.json", }
+        root_markers = { "deno.json" },
       })
 
-      -- TailwindCSS LSP
       lsp.config("tailwindcss", {
         cmd = { "tailwindcss-language-server", "--stdio" },
-        filetypes = { "html", "css", "scss", "javascript", "javascriptreact", "typescript", "typescriptreact", "vue", "tsx", 'jsx' },
-        root_markers = { "tailwind.config.js", "package.json", "tailwind.config.ts",
-          "tailwind.config.cjs", "tailwind.config.mts", ".git" },
-        settings = {},
-        capabilities = default_capabilities
+        filetypes = {
+          "html", "css", "scss", "javascript", "javascriptreact",
+          "typescript", "typescriptreact", "vue", "tsx", "jsx",
+        },
+        root_markers = { "pnpm-workspace.yaml", "turbo.json", ".git", "tailwind.config.js", "tailwind.config.ts", "tailwind.config.cjs", "tailwind.config.mts", "package.json" },
+        capabilities = default_capabilities,
       })
 
       lsp.config("cssls", {
         capabilities = default_capabilities,
         settings = {
-          css = {
-            validate = true, -- Enable CSS validation
-          },
-          less = {
-            validate = true, -- Enable Less validation
-          },
-          scss = {
-            validate = true, -- Enable SCSS validation
-          },
+          css = { validate = true },
+          less = { validate = true },
+          scss = { validate = true },
         },
       })
 
-      -- Prisma LSP
       lsp.config("prismals", {
         cmd = { "prisma-language-server", "--stdio" },
         filetypes = { "prisma" },
-        root_markers = { ".git", "package.json", "prisma" },
+        root_markers = { "pnpm-workspace.yaml", "turbo.json", ".git", "package.json", "prisma" },
       })
-
 
       lsp.config("emmet_language_server", {
         filetypes = {
-          "astro",
-          "css",
-          "eruby",
-          "html",
-          "javascript",
-          "javascriptreact",
-          "less",
-          "php",
-          "pug",
-          "sass",
-          "scss",
-          "typescriptreact"
+          "astro", "css", "eruby", "html", "javascript",
+          "javascriptreact", "less", "php", "pug", "sass",
+          "scss", "typescriptreact", "vue"
         },
       })
 
-      -- Csharp
       lsp.config("omnisharp", {
         cmd = { "omnisharp", "--languageserver", "--hostPID", tostring(vim.fn.getpid()) },
-        capabilities = default_capabilities
+        capabilities = default_capabilities,
       })
+      lsp.config("razor_ls", { capabilities = default_capabilities })
+      lsp.config("sharp_ls", { capabilities = default_capabilities })
 
-      lsp.config("razor_ls", {
-        capabilities = default_capabilities
+      lsp.config("pyright", { capabilities = default_capabilities })
+
+      lsp.config("html", { capabilities = default_capabilities })
+
+      lsp.config("vue_ls", {
+        capabilities = default_capabilities,
+        root_markers = { "pnpm-workspace.yaml", "turbo.json", ".git", "package.json" },
+        filetypes = { "vue" },
+        init_options = {
+          typescript = {
+            tsdk = vim.fn.stdpath("data") .. "/mason/packages/typescript-language-server/node_modules/typescript/lib",
+          },
+        },
       })
-
-
-      lsp.config("sharp_ls", {
-        capabilities = default_capabilities
-      })
-
-      lsp.config("pyright", {
-        capabilities = default_capabilities
-      })
-
-      lsp.config("html", {
-        capabilities = default_capabilities
-      })
+      lsp.enable("vue_ls")
 
       lsp.config("clangd", {
         cmd = {
           "clangd",
-          "--compile-commands-dir=build", -- Example: specify where compile_commands.json is located
+          "--compile-commands-dir=build",
           "--fallback-style=llvm",
         },
         filetypes = { "c", "cpp", "cc", "c++", "tpp" },
-        capabilities = default_capabilities
+        capabilities = default_capabilities,
       })
 
-      require("neodev").setup() -- This will populate vim globally
+      require("neodev").setup()
       lsp.config("lua_ls", {
         capabilities = default_capabilities,
         settings = {
           Lua = {
-            diagnostics = {
-              globals = { 'vim' }
-            },
-            workspace = {
-              checkThirdParty = false
-            },
-            telemetry = {
-              enable = false
-            },
-          }
-        }
+            diagnostics = { globals = { "vim" } },
+            workspace = { checkThirdParty = false },
+            telemetry = { enable = false },
+          },
+        },
       })
     end,
   },
@@ -149,7 +158,10 @@ return {
     "williamboman/mason-lspconfig.nvim",
     config = function()
       require("mason-lspconfig").setup({
-        ensure_installed = { "ts_ls", "tailwindcss", "prismals", "emmet_language_server", "cssls", "lua_ls", "omnisharp", "denols", "pyright", "clangd", "html" },
+        ensure_installed = {
+          "ts_ls", "tailwindcss", "prismals", "emmet_language_server",
+          "cssls", "lua_ls", "omnisharp", "denols", "pyright", "clangd", "html", "vue_ls"
+        },
       })
     end,
   },

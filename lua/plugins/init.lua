@@ -31,13 +31,15 @@ return {
   { "folke/tokyonight.nvim" },
   { "fxn/vim-monochrome" },
 
-  -- Prettier
-  {
-    "prettier/vim-prettier",
-    build = "npm install --frozen-lockfile --production",
-    ft = { "javascript", "typescript", "css", "less", "scss", "json", "graphql", "markdown", "vue", "yaml", "html", "lua" }
-  },
-
+  -- -- Prettier
+  -- {
+  --   "prettier/vim-prettier",
+  --   build = "npm install --frozen-lockfile --production",
+  --   ft = { "javascript", "typescript", "css", "less", "scss", "json", "graphql", "markdown", "vue", "yaml", "html", "lua" },
+  --   init = function()
+  --     vim.g["prettier#exec_cmd_path"] = vim.fn.stdpath("data") .. "/mason/bin/prettier"
+  --   end,
+  -- },
   {
     "roobert/tailwindcss-colorizer-cmp.nvim",
     config = function()

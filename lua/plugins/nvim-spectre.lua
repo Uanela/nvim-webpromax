@@ -1,7 +1,7 @@
 return {
   "nvim-pack/nvim-spectre",
   keys = {
-    { "<C-S-F>", function() require("spectre").toggle({ is_insert_mode = true }) end, desc = "Search and Replace (Spectre)" },
+    { "<leader>f", function() require("spectre").toggle({ is_insert_mode = true }) end, desc = "Search and Replace (Spectre)" },
   },
   opts = {
     live_update = true,

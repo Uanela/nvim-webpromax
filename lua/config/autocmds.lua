@@ -13,37 +13,69 @@ autocmd("BufWritePre", {
   end,
 })
 
--- Auto-format on save
 augroup("AutoFormat", { clear = true })
-autocmd("BufWritePre", {
+vim.api.nvim_create_autocmd("BufWritePre", {
   group = "AutoFormat",
-  pattern = { "*.py", "*.lua", "*.rs", "*.go", "*.java" },
+  pattern = {
+    "*.tsx", "*.vue", "*.ts", "*.js", "*.jsx", "*.json", "*.css", "*.md",
+    "*.prisma", "*.lua", "*.py", "*.go", "*.rs", "*.java", "*.cpp",
+    "*.h", "*.cc", "*.cxx", "*.hpp", "*.html", "*.mdx", "*.c"
+  },
   callback = function()
-    vim.lsp.buf.format({ async = false })
+    local buf_name = vim.api.nvim_buf_get_name(0)
+    local ext = vim.fn.expand("%:e")
+
+    local prettier_parsers = {
+      tsx = "typescript",
+      ts = "typescript",
+      js = "babel",
+      jsx = "babel",
+      json = "json",
+      css = "css",
+      md = "markdown",
+      html = "html",
+      mdx = "mdx",
+      vue = "vue",
+      prisma = "prisma",
+    }
+
+    if prettier_parsers[ext] then
+      local view = vim.fn.winsaveview()
+      local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
+      local input = table.concat(lines, "\n")
+
+      local cmd_args = {
+        "prettier",
+        "--config",
+        vim.fn.expand("~/.prettierrc"),
+        "--parser",
+        prettier_parsers[ext],
+        "--stdin-filepath",
+        buf_name,
+      }
+
+      if ext == "prisma" then
+        table.insert(cmd_args, "--plugin=prettier-plugin-prisma")
+      end
+
+      local result = vim.system(cmd_args, {
+        stdin = input,
+        text = true,
+      }):wait()
+
+      if result.code == 0 then
+        local formatted = vim.split(result.stdout, "\n", { plain = true })
+        vim.api.nvim_buf_set_lines(0, 0, -1, false, formatted)
+        vim.fn.winrestview(view)
+      else
+        vim.notify(result.stderr, vim.log.levels.ERROR)
+      end
+    else
+      vim.lsp.buf.format({ async = false })
+    end
   end,
 })
 
--- Prettier auto-format (with safety check)
-autocmd("BufWritePre", {
-  group = "AutoFormat",
-  pattern = { "*.tsx", "*.ts", "*.js", "*.jsx", "*.json", "*.css", "*.md", "*.prisma", "*.lua", "*.py", "*.go", "*.rs", "*.java", "*.cpp", "*.h", "*.cc", "*.cxx", "*.hpp", "*.html", "*.mdx", "*.c" },
-  callback = function(ev)
-    local filetype = vim.bo[ev.buf].filetype
-    local function format_with_lsp()
-      pcall(vim.lsp.buf.format, { async = false })
-    end
-    if filetype == 'prisma' or filetype == 'lua' then
-      format_with_lsp()
-    elseif vim.fn.exists(':PrettierAsync') == 2 then
-      vim.cmd("PrettierAsync")
-    elseif vim.fn.exists(':Prettier') == 2 then
-      vim.cmd("Prettier")
-    else
-      -- Fallback to LSP formatting if Prettier isn't available
-      format_with_lsp()
-    end
-  end,
-})
 
 -- Set filetype for React files
 autocmd({ "BufRead", "BufNewFile" }, {

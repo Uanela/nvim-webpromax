@@ -1,6 +1,6 @@
 return {
   "nvim-tree/nvim-tree.lua",
-  dir = "~/Documents/development/lua/nvim-tree.lua",
+  -- dir = "~/Documents/development/lua/nvim-tree.lua",
   branch = "feat/add-download-from-path",
   dependencies = { "DaikyXendo/nvim-material-icon" },
   keys = {

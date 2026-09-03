@@ -71,7 +71,7 @@ return {
       lsp.config("tailwindcss", {
         cmd = { "tailwindcss-language-server", "--stdio" },
         filetypes = {
-          "html", "css", "scss", "javascript", "javascriptreact",
+          "html", "java", "ftl", "css", "scss", "javascript", "javascriptreact",
           "typescript", "typescriptreact", "vue", "tsx", "jsx",
         },
         root_markers = { "pnpm-workspace.yaml", "turbo.json", ".git", "tailwind.config.js", "tailwind.config.ts", "tailwind.config.cjs", "tailwind.config.mts", "package.json" },
@@ -97,7 +97,7 @@ return {
         filetypes = {
           "astro", "css", "eruby", "html", "javascript",
           "javascriptreact", "less", "php", "pug", "sass",
-          "scss", "typescriptreact", "vue"
+          "scss", "typescriptreact", "vue", "ftl"
         },
       })
 
@@ -110,7 +110,7 @@ return {
 
       lsp.config("pyright", { capabilities = default_capabilities })
 
-      lsp.config("html", { capabilities = default_capabilities })
+      lsp.config("html", { capabilities = default_capabilities, filetypes = { "html", "vue", "template", "ftl" } })
 
       lsp.config("vue_ls", {
         capabilities = default_capabilities,
@@ -160,7 +160,7 @@ return {
       require("mason-lspconfig").setup({
         ensure_installed = {
           "ts_ls", "tailwindcss", "prismals", "emmet_language_server",
-          "cssls", "lua_ls", "omnisharp", "denols", "pyright", "clangd", "html", "vue_ls"
+          "cssls", "lua_ls", "omnisharp", "denols", "pyright", "clangd", "html", "vue_ls", "jtdls"
         },
       })
     end,
